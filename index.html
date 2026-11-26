@@ -97,6 +97,21 @@ a:hover{text-decoration-color:var(--acc)}
 .contact h2{font:500 clamp(44px,7vw,108px)/.95 var(--sans);letter-spacing:-.045em;margin:0 0 26px}
 .contact h2 span{color:var(--muted)}
 .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:70px;padding-top:18px;border-top:1px solid var(--line);font:400 12.5px var(--mono);color:var(--muted)}
+
+/* native scrollbar hidden; replaced by the zoom rail */
+html{scrollbar-width:none}html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
+#rail{position:fixed;right:calc(var(--gut) - 6px);top:50%;transform:translateY(-50%);z-index:5;display:flex;flex-direction:column;gap:0;transition:opacity .4s}
+#rail::before{content:"";position:absolute;right:5px;top:6px;bottom:6px;width:1px;background:var(--line-2)}
+#rail .fill{position:absolute;right:5px;top:6px;width:1px;background:var(--acc);height:0}
+#rail button{text-shadow:0 0 6px rgba(11,12,14,.95),0 0 2px rgba(11,12,14,.95);position:relative;display:flex;align-items:center;justify-content:flex-end;gap:12px;height:44px;padding:0;background:none;border:0;cursor:pointer;font:400 11.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+#rail button i{width:11px;height:11px;border-radius:50%;border:1px solid var(--line-2);background:var(--bg);flex:none;transition:background .3s,border-color .3s,transform .3s}
+#rail button span{opacity:0;transform:translateX(6px);transition:opacity .3s,transform .3s}
+#rail:hover button span,#rail button.on span{opacity:1;transform:none}
+#rail button.on{color:var(--ink)}
+#rail button.on i{background:var(--acc);border-color:var(--acc);transform:scale(1.15)}
+#rail button.done i{border-color:var(--acc)}
+#rail button:focus-visible{outline:2px solid var(--acc);outline-offset:4px;border-radius:4px}
+@media (max-width:900px){#rail{right:10px;top:120px;transform:none}#rail button{height:30px}#rail button span{display:none}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
@@ -108,6 +123,7 @@ a:hover{text-decoration-color:var(--acc)}
   <nav aria-label="Sections"><a href="#tools">Tools</a><a href="#record">Record</a><a class="k" href="#contact">Contact</a></nav>
 </header>
 
+<nav id="rail" aria-label="Zoom levels"><span class="fill" aria-hidden="true"></span><button type="button" data-i="0"><span>Pin</span><i aria-hidden="true"></i></button><button type="button" data-i="1"><span>Chip</span><i aria-hidden="true"></i></button><button type="button" data-i="2"><span>Board</span><i aria-hidden="true"></i></button><button type="button" data-i="3"><span>Door</span><i aria-hidden="true"></i></button><button type="button" data-i="4"><span>Building</span><i aria-hidden="true"></i></button><button type="button" data-i="5"><span>Network</span><i aria-hidden="true"></i></button><button type="button" data-i="6"><span>Policy</span><i aria-hidden="true"></i></button></nav>
 <div id="veil" aria-hidden="true"></div>
 <div id="hud">
   <div id="cap">
@@ -170,7 +186,7 @@ a:hover{text-decoration-color:var(--acc)}
     </section>
   </div>
   <div id="scale" aria-hidden="true"><div><div class="n" id="sn">10<sup>−4</sup></div></div><div class="bar"></div><div class="u" id="su">0.1 mm</div></div>
-  <div class="hint" id="hint" aria-hidden="true">scroll to zoom out</div>
+  
 </div>
 
 <main id="top">
@@ -225,7 +241,8 @@ import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const caps=[...document.querySelectorAll('.cp')],sn=document.getElementById('sn'),su=document.getElementById('su'),hint=document.getElementById('hint'),hud=document.getElementById('hud');
+const caps=[...document.querySelectorAll('.cp')],sn=document.getElementById('sn'),su=document.getElementById('su'),hud=document.getElementById('hud');
+const rail=document.getElementById('rail'),rb=[...rail.querySelectorAll('button')],rfill=rail.querySelector('.fill');
 // log10 of camera distance (metres) at each stop: pin, chip, board, door, building, network, policy
 const STOPS=[-2.15,-1.35,-0.7,0.78,1.85,0.35,-0.05];
 const zoomEl=document.getElementById('zoom');
@@ -238,10 +255,14 @@ let curCap=0;
 function ui(p){const s=stopAt(p),i=Math.round(s);
   if(i!==curCap){caps[curCap].classList.remove('on');caps[i].classList.add('on');curCap=i}
   const sI=stopAt(p),ii=Math.min(STOPS.length-2,Math.floor(sI)),ff=sI-ii,gg=ff<.28?0:ff>.72?1:smooth((ff-.28)/.44);const lg=STOPS[ii]+(STOPS[ii+1]-STOPS[ii])*gg,e=Math.round(lg);sn.innerHTML='10<sup>'+sup(e).replace('⁻','−')+'</sup>';su.textContent=fmt(Math.pow(10,lg)*.25);
-  hint.style.opacity=p>.02?0:1;
+  
   const end=document.querySelector('.after').getBoundingClientRect().top;hud.style.opacity=end<innerHeight*.6?Math.max(0,(end-innerHeight*.1)/(innerHeight*.5)):1;
-  hud.style.pointerEvents=hud.style.opacity<.3?'none':''}
+  hud.style.pointerEvents=hud.style.opacity<.3?'none':'';
+  rail.style.opacity=hud.style.opacity;rail.style.pointerEvents=hud.style.pointerEvents;
+  const rI=stopAt(p);rb.forEach((b,k)=>{b.classList.toggle('on',k===Math.round(rI));b.classList.toggle('done',k<Math.round(rI))});
+  const ra=rb[0].offsetTop+22,rz=rb[rb.length-1].offsetTop+22;rfill.style.top=ra+'px';rfill.style.height=((rz-ra)*rI/(rb.length-1))+'px'}
 function smooth(t){return t*t*(3-2*t)}
+rb.forEach((b,k)=>b.addEventListener('click',()=>{const r=zoomEl.getBoundingClientRect();const total=r.height-innerHeight;const y=scrollY+r.top+total*(k/(STOPS.length-1));scrollTo({top:y,behavior:reduce?'auto':'smooth'})}));
 function logDist(p){const s=stopAt(p),i=Math.min(STOPS.length-2,Math.floor(s)),f=s-i;
   // hold near each stop, travel between stops
   const g=f<.28?0:f>.72?1:smooth((f-.28)/.44);return STOPS[i]+(STOPS[i+1]-STOPS[i])*g}
