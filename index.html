@@ -4,627 +4,413 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Karandev Chauhan</title>
-<meta name="description" content="Karandev Chauhan builds every layer of a device, from the circuit board to the login policy, and secures every layer. Security, IAM and embedded hardware in the Greater Toronto Area.">
-<meta name="theme-color" content="#0b0d10">
+<meta name="description" content="From the pin to the policy: Karandev Chauhan builds field hardware and secures the identity, devices and network around it. Security, IAM and embedded hardware in the Greater Toronto Area.">
+<meta name="theme-color" content="#0b0c0e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0d10'/%3E%3Cpath d='M6 22l10 5 10-5M6 17l10 5 10-5M6 12l10 5 10-5-10-5z' fill='none' stroke='%23eef0f3' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0c0e'/%3E%3Ccircle cx='16' cy='16' r='2.4' fill='%23ffb547'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23e9e7e2' stroke-width='1.2'/%3E%3Ccircle cx='16' cy='16' r='12' fill='none' stroke='%23e9e7e2' stroke-opacity='.45' stroke-width='1'/%3E%3C/svg%3E">
 <style>
 :root{
-  --bg:#0b0d10; --bg-2:#101318; --surface:#151920; --line:#232a34; --line-2:#323c49;
-  --text:#eef0f3; --text-2:#c2c9d2; --muted:#8e98a5;
-  --red:#ff4d3d; --ok:#45d483;
-  --l-id:#a98bff; --l-dev:#ff8fb1; --l-net:#4fb4ff; --l-fw:#5fe0c8; --l-pcb:#3ccf6a; --l-enc:#d7dbe2;
-  --acc:var(--l-net);
-  --disp:"Archivo",system-ui,sans-serif; --text-f:"Public Sans",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
-  --gut:clamp(18px,4vw,64px);
+  --bg:#0b0c0e; --bg-2:#121317; --line:#24262c; --line-2:#34363d;
+  --ink:#e9e7e2; --ink-2:#b4b2ad; --muted:#7d7c78; --acc:#ffb547;
+  --sans:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Geist Mono",ui-monospace,Consolas,monospace;
+  --gut:clamp(20px,4.5vw,72px);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scrollbar-color:var(--line-2) var(--bg)}
+html{scroll-behavior:smooth}
 html,body{overflow-x:clip}
-body{margin:0;background:var(--bg);color:var(--text);font:17px/1.6 var(--text-f);-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
 ::selection{background:var(--acc);color:var(--bg)}
-a{color:var(--text);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:4px;text-decoration-thickness:1.5px}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:4px;text-decoration-thickness:1px}
 a:hover{text-decoration-color:var(--acc)}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:4px}
-.wrap{max-width:1320px;margin:0 auto;padding:0 var(--gut)}
-.num,table{font-variant-numeric:tabular-nums}
+.wrap{max-width:1360px;margin:0 auto;padding:0 var(--gut)}
 
-/* top bar */
-.top{position:fixed;inset:0 0 auto 0;z-index:30;display:flex;align-items:center;gap:20px;padding:16px var(--gut);background:rgba(11,13,16,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.05)}
-.top .me{font:800 15px var(--disp);font-stretch:110%;letter-spacing:.02em;text-transform:uppercase;text-decoration:none}
-.top nav{margin-left:auto;display:flex;gap:22px;font:600 13px var(--mono)}
-.top nav a{text-decoration:none;color:var(--text-2)}
-.top nav a:hover{color:var(--text)}
-@media (max-width:720px){.top nav a:not(.mail){display:none}}
+#gl{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block;pointer-events:none;transition:opacity .5s}
+.top{position:fixed;inset:0 0 auto 0;z-index:6;display:flex;align-items:center;gap:20px;padding:18px var(--gut);background:linear-gradient(rgba(11,12,14,.85),rgba(11,12,14,0))}
+.top .me{font:500 15px var(--sans);letter-spacing:-.01em;text-decoration:none}
+.top nav{margin-left:auto;display:flex;gap:26px;font:400 14px var(--sans)}
+.top nav a{text-decoration:none;color:var(--ink-2)}
+.top nav a:hover{color:var(--ink)}
+@media (max-width:720px){.top nav a:not(.k){display:none}}
 
-/* hero */
-.hero{min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;gap:clamp(20px,4vw,60px);padding-top:80px}
-.hero h1{font:900 clamp(46px,6.6vw,104px)/.9 var(--disp);font-stretch:92%;letter-spacing:-.03em;margin:0 0 26px;text-wrap:balance}
-.hero h1 em{font-style:normal;color:var(--muted)}
-.hero .lede{font-size:clamp(18px,1.6vw,22px);line-height:1.5;color:var(--text-2);max-width:36ch;margin:0 0 34px}
-.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:10px;font:700 16px var(--text-f);padding:14px 22px;border-radius:999px;border:1.5px solid var(--line-2);color:var(--text);background:transparent;text-decoration:none;cursor:pointer;transition:border-color .2s,background .2s,color .2s,transform .2s}
-.btn:hover{border-color:var(--text)}
-.btn:active{transform:scale(.98)}
-.btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
-.btn.primary:hover{background:#fff}
-.btn svg{width:16px;height:16px}
-.paths{margin-top:26px;display:flex;flex-wrap:wrap;gap:8px 22px;font:600 13px var(--mono);color:var(--muted)}
-.paths a{color:var(--text-2)}
-.status{margin-top:12px;font:500 13px var(--mono);color:var(--muted)}
-@media (max-width:900px){.hero{grid-template-columns:minmax(0,1fr);padding-top:80px;min-height:0}.hero .stage{order:-1;height:300px}.hero .stack{scale:.72}}
-
-/* 3D stage */
-.stage{position:relative;height:min(78vh,720px);perspective:1800px;perspective-origin:50% 30%}
-.stack{position:absolute;left:50%;top:58%;width:360px;height:250px;margin:-125px 0 0 -180px;transform-style:preserve-3d;transform:rotateX(58deg) rotateZ(-38deg);transition:transform 1s cubic-bezier(.16,1,.3,1)}
-.plate{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(var(--i) * var(--gap,10px)));transition:transform .9s cubic-bezier(.16,1,.3,1),opacity .5s,filter .5s}
-.plate svg{position:absolute;inset:0;width:100%;height:100%;border-radius:14px;overflow:visible}
-.plate::after{content:"";position:absolute;inset:0;border-radius:14px;transform:translateZ(-6px);background:rgba(0,0,0,.55);filter:blur(1px)}
-.plate .tag{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotateZ(38deg) rotateX(-58deg) translateZ(40px);white-space:nowrap;font:700 12px var(--mono);letter-spacing:.04em;background:var(--red);color:#1a0603;padding:6px 10px;border-radius:4px;opacity:0;transition:opacity .25s}
-.plate .lbl{position:absolute;right:-8px;top:50%;transform:translateX(100%) rotateZ(38deg) rotateX(-58deg);transform-origin:left center;white-space:nowrap;font:700 12px var(--mono);letter-spacing:.06em;color:var(--c);opacity:0;transition:opacity .4s}
-.stage.open .plate .lbl{opacity:1}
-.stage.dim .plate{opacity:.28;filter:saturate(.4)}
-.stage.dim .plate.on{opacity:1;filter:none}
-.plate.cur .tag{opacity:1}
-.stage.attacking .plate{opacity:.22}
-.stage.attacking .plate.cur{opacity:1}
-.plate.hit svg{filter:drop-shadow(0 0 18px var(--red))}
-.beam{position:absolute;left:50%;top:0;width:3px;height:0;margin-left:-1.5px;background:linear-gradient(var(--red),transparent);box-shadow:0 0 18px var(--red);opacity:0;pointer-events:none}
-.stage .shadow{position:absolute;left:50%;top:70%;width:420px;height:120px;margin-left:-210px;border-radius:50%;background:radial-gradient(rgba(79,180,255,.16),transparent 70%);filter:blur(6px)}
-.hero .stack{animation:idle 14s ease-in-out infinite}
-@keyframes idle{50%{transform:rotateX(58deg) rotateZ(-28deg)}}
-
-/* the stack scrollytelling */
-.layers{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(20px,4vw,72px)}
-.layers .pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center}
-.layers .pin .stage{height:min(74vh,700px)}
-.layers .pin .ctl{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:6px}
-.attack{display:inline-flex;align-items:center;gap:10px;font:700 14px var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--red);background:transparent;border:1.5px solid var(--red);border-radius:999px;padding:11px 18px;cursor:pointer}
-.attack:hover{background:rgba(255,77,61,.1)}
-.attack[aria-pressed="true"]{background:var(--red);color:#1a0603}
-.attack i{width:9px;height:9px;border-radius:50%;background:currentColor}
-.result{font:600 13px var(--mono);color:var(--muted);min-height:1.6em}
-.stage.attacking~.ctl .result,.result.live{color:var(--red);font-size:15px}
-.plate .tag{display:none}
-.result b{color:var(--ok)}
-.layer{min-height:92vh;display:flex;flex-direction:column;justify-content:center;padding:8vh 0;scroll-margin-top:0}
-.layer .idx{display:flex;align-items:center;gap:12px;font:600 13px var(--mono);color:var(--c);letter-spacing:.04em}
-.layer .idx::before{content:"";width:28px;height:3px;border-radius:2px;background:var(--c)}
-.layer h2{font:900 clamp(36px,4.4vw,64px)/.95 var(--disp);font-stretch:92%;letter-spacing:-.025em;margin:14px 0 12px}
-.layer .plain{font-size:clamp(18px,1.4vw,20px);color:var(--text-2);margin:0 0 22px;max-width:44ch}
-.layer ul{list-style:none;margin:0 0 22px;padding:0;max-width:56ch}
-.layer li{position:relative;padding:12px 0 12px 22px;border-top:1px solid var(--line)}
-.layer li::before{content:"";position:absolute;left:0;top:22px;width:8px;height:8px;border-radius:2px;background:var(--c)}
-.layer li b{font-weight:700;color:var(--text)}
-.proof{display:inline-flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;font:600 14px var(--mono);color:var(--text);padding:12px 16px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);max-width:56ch}
-.proof span{color:var(--c)}
-.proof a{color:var(--text)}
-.layer.dim-track{opacity:.4}
+/* the zoom */
+.zoom{position:relative;z-index:1;height:900vh}
+#hud{position:fixed;inset:0;z-index:3;pointer-events:none}
+#scale{position:absolute;left:var(--gut);bottom:34px;display:flex;align-items:flex-end;gap:16px;transition:opacity .4s}
+#scale .n{font:300 clamp(44px,5.4vw,82px)/1 var(--sans);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+#scale .n sup{font-size:.42em;vertical-align:.95em;margin-left:2px}
+#scale .u{font:400 13px var(--mono);color:var(--muted);padding-bottom:10px}
+#scale .bar{width:120px;height:1px;background:var(--ink-2);position:relative;margin-bottom:16px}
+#scale .bar::before,#scale .bar::after{content:"";position:absolute;top:-4px;width:1px;height:9px;background:var(--ink-2)}
+#scale .bar::before{left:0}#scale .bar::after{right:0}
+#cap{position:absolute;left:var(--gut);top:50%;transform:translateY(-50%);width:min(460px,42vw)}
+.cp{position:absolute;inset:auto 0 auto 0;top:0;transform:translateY(-50%);opacity:0;transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.cp.on{opacity:1;pointer-events:auto}
+.cp .k{font:500 12.5px var(--mono);color:var(--acc);letter-spacing:.06em}
+.cp h1,.cp h2{font:500 clamp(34px,3.8vw,58px)/1.04 var(--sans);letter-spacing:-.035em;margin:12px 0 14px}
+.cp h1 span,.cp h2 span{color:var(--muted)}
+.cp p{margin:0 0 12px;color:var(--ink-2);font-size:17px}
+.cp ul{list-style:none;margin:6px 0 0;padding:0}
+.cp li{padding:8px 0;border-top:1px solid var(--line-2);color:var(--ink-2);font-size:15.5px}
+.cp li b{color:var(--ink);font-weight:500}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.btn{display:inline-flex;align-items:center;gap:10px;font:500 15px var(--sans);padding:12px 20px;border-radius:999px;border:1px solid var(--line-2);color:var(--ink);background:rgba(11,12,14,.4);text-decoration:none;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.hint{position:absolute;right:var(--gut);bottom:40px;font:400 12.5px var(--mono);color:var(--muted);transition:opacity .4s}
+#cap .shade{display:none}
+#veil{position:fixed;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(11,12,14,.9) 0%,rgba(11,12,14,.72) 30%,rgba(11,12,14,0) 52%)}
+@media (max-width:900px){#veil{background:linear-gradient(0deg,rgba(11,12,14,.95) 0%,rgba(11,12,14,.8) 42%,rgba(11,12,14,0) 62%)}}
 @media (max-width:900px){
-  .layers{grid-template-columns:minmax(0,1fr)}
-  .layers .pin{position:relative;height:auto;padding-top:40px}
-  .layers .pin .stage{height:420px}
-  .layers .pin .stack{transform:rotateX(58deg) rotateZ(-38deg) scale(.66)}
-  .plate .lbl{display:none}
-  .plate .tag{font-size:10px}
-  .layer{min-height:0;padding:40px 0}
+  #cap{left:var(--gut);right:var(--gut);width:auto;top:auto;bottom:118px;transform:none}
+  .cp{top:auto;bottom:0;transform:none}
+  .cp h1,.cp h2{font-size:30px}.cp p{font-size:15px}.cp li{font-size:14px;padding:6px 0}
+  #scale{bottom:22px}#scale .n{font-size:40px}.hint{display:none}
 }
 
-/* tools */
-.sec-h{display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin:clamp(90px,12vw,170px) 0 30px}
-.sec-h h2{font:900 clamp(36px,4.6vw,68px)/.95 var(--disp);font-stretch:92%;letter-spacing:-.025em;margin:0;max-width:16ch}
-.sec-h p{margin:0;color:var(--text-2);max-width:46ch}
-.tools{border-top:1px solid var(--line-2)}
-.tool{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr) minmax(0,1fr) auto;gap:24px;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line-2);transition:background .2s}
-.tool:hover{background:linear-gradient(90deg,transparent,rgba(255,255,255,.025),transparent)}
-.tool h3{font:800 clamp(22px,2vw,28px)/1.05 var(--disp);font-stretch:100%;margin:0}
-.tool h3 small{display:block;font:500 12px var(--mono);color:var(--muted);margin-top:8px;letter-spacing:.02em}
-.tool p{margin:0;color:var(--text-2)}
-.tool .pr{font:600 14px/1.55 var(--mono);color:var(--text)}
-.tool .go{font:600 13px var(--mono);white-space:nowrap}
-.dots{display:inline-flex;gap:5px;margin-right:8px;vertical-align:middle}
-.dots i{width:8px;height:8px;border-radius:2px;display:block}
-.tool.hide{display:none}
+/* after the zoom */
+.after{position:relative;z-index:4;background:var(--bg)}
+.sec{padding:clamp(90px,11vw,150px) 0 0}
+.sec-h{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:end;margin-bottom:26px}
+.sec-h h2{font:500 clamp(32px,3.6vw,52px)/1.05 var(--sans);letter-spacing:-.035em;margin:0}
+.sec-h p{margin:0;color:var(--ink-2);max-width:46ch}
+@media (max-width:860px){.sec-h{grid-template-columns:minmax(0,1fr)}}
+.tools{border-top:1px solid var(--ink)}
+.tool{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.3fr) minmax(0,1fr) auto;gap:28px;align-items:baseline;padding:24px 0;border-bottom:1px solid var(--line)}
+.tool h3{font:500 22px/1.1 var(--sans);letter-spacing:-.02em;margin:0}
+.tool h3 small{display:block;font:400 12px var(--mono);color:var(--muted);margin-top:8px}
+.tool p{margin:0;color:var(--ink-2)}
+.tool .pr{font:400 13.5px/1.55 var(--mono);color:var(--ink)}
+.tool .go{font:400 13px var(--mono);white-space:nowrap}
 @media (max-width:900px){.tool{grid-template-columns:minmax(0,1fr);gap:8px}}
-
-/* story */
-.story{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;border:1px solid var(--line-2);border-radius:22px;overflow:hidden;background:var(--bg-2);margin-top:clamp(90px,12vw,160px)}
-.story .t{padding:clamp(28px,4vw,56px)}
-.story h2{font:900 clamp(30px,3.4vw,48px)/.98 var(--disp);font-stretch:92%;letter-spacing:-.02em;margin:0 0 14px}
-.story p{color:var(--text-2);margin:0 0 26px;max-width:46ch}
-.story .art{position:relative;min-height:280px;border-left:1px solid var(--line-2);background:radial-gradient(circle at 70% 40%,rgba(169,139,255,.14),transparent 60%)}
-.story .art svg{position:absolute;inset:0;width:100%;height:100%}
-@media (max-width:860px){.story{grid-template-columns:minmax(0,1fr)}.story .art{border-left:0;border-top:1px solid var(--line-2)}}
-
-/* record */
-.record{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 56px}
-.rec{padding:20px 0;border-top:1px solid var(--line-2);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:baseline}
-.rec b{font-weight:700}
-.rec span{color:var(--text-2);grid-column:1}
-.rec i{font:normal 600 13px var(--mono);color:var(--muted);grid-row:1;grid-column:2;white-space:nowrap}
+.story{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:center;padding:34px 38px;border:1px solid var(--line-2);border-radius:20px;background:var(--bg-2)}
+.story h3{font:500 clamp(24px,2.4vw,32px)/1.1 var(--sans);letter-spacing:-.03em;margin:0 0 10px}
+.story p{margin:0;color:var(--ink-2);max-width:60ch}
+@media (max-width:800px){.story{grid-template-columns:minmax(0,1fr);padding:26px}}
+.record{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 56px;border-top:1px solid var(--ink)}
+.rec{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.rec b{font-weight:500}.rec span{color:var(--ink-2);grid-column:1}.rec i{font:normal 400 13px var(--mono);color:var(--muted);grid-row:1;grid-column:2;white-space:nowrap}
 @media (max-width:860px){.record{grid-template-columns:minmax(0,1fr)}}
-
-/* contact */
-.contact{margin:clamp(100px,14vw,190px) 0 0;padding-bottom:60px}
-.contact h2{font:900 clamp(48px,8vw,132px)/.88 var(--disp);font-stretch:88%;letter-spacing:-.035em;margin:0 0 28px}
-.contact h2 em{font-style:normal;color:var(--muted)}
-.contact p{color:var(--text-2);max-width:52ch;margin:0 0 30px;font-size:19px}
-.links{display:flex;flex-wrap:wrap;gap:12px}
-.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:80px;padding-top:20px;border-top:1px solid var(--line);font:500 12.5px var(--mono);color:var(--muted)}
-
-
-/* WebGL scene */
-#gl{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block;transition:opacity .4s}
-main,.top{position:relative;z-index:1}
-.top{position:fixed;z-index:30}
-body.gl .stage .stack,body.gl .stage .shadow,body.gl .beam{display:none}
-body.gl .layer .plain,body.gl .layer li{text-shadow:0 1px 12px rgba(11,13,16,.9)}
-@media (max-width:900px){body.gl .layers .pin .stage{height:400px}.atk button{background:rgba(11,13,16,.88)}}
-
-
-/* attack picker */
-.atk{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.atk-l{font:700 13px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--red);margin-right:4px;display:inline-flex;align-items:center;gap:8px}
-.atk-l::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red)}
-.atk button{font:600 13px var(--text-f);color:var(--text);background:rgba(255,255,255,.04);border:1px solid var(--line-2);border-radius:999px;padding:8px 13px;cursor:pointer;transition:border-color .2s,background .2s,color .2s}
-.atk button:hover{border-color:var(--red);color:#fff}
-.atk button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#1a0603}
-.atk button:disabled{opacity:.45;cursor:default}
-.result{margin-top:12px;font:600 13.5px/1.7 var(--mono);color:var(--text-2);min-height:4.6em;max-width:62ch}
-.result .dim{color:var(--muted);font-weight:500}
-.result .pass{color:#ffb020}.result .block{color:var(--red)}.result .ok{color:var(--ok)}
-.result div{animation:rin .35s cubic-bezier(.16,1,.3,1)}
-@keyframes rin{from{opacity:0;transform:translateY(6px)}}
-.stage.pick{cursor:pointer}
-/* inspect mode */
-#hot{position:fixed;inset:0;z-index:4;pointer-events:none}
-#hot .hs{position:absolute;transform:translate(-6px,-6px);display:flex;align-items:center;gap:10px;opacity:0;transition:opacity .4s}
-body.inspecting #hot .hs{opacity:1}
-#hot .hs i{width:12px;height:12px;border-radius:50%;background:var(--hc);box-shadow:0 0 0 4px rgba(0,0,0,.4),0 0 14px var(--hc);flex:none}
-#hot .hs span{font:600 12.5px var(--mono);color:#fff;background:rgba(11,13,16,.86);border:1px solid var(--hc);border-radius:6px;padding:5px 9px;white-space:nowrap}
-#inspect{position:fixed;left:var(--gut);bottom:28px;z-index:5;max-width:min(440px,calc(100vw - 36px));background:rgba(11,13,16,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line-2);border-radius:16px;padding:18px 20px;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .35s,transform .35s}
-body.inspecting #inspect{opacity:1;transform:none;pointer-events:auto}
-#inspect h3{font:900 28px/1 var(--disp);font-stretch:92%;margin:4px 0 8px}
-#inspect p{margin:0 0 14px;color:var(--text-2);font-size:15px}
-#inspect .k{font:600 12px var(--mono);color:var(--ic)}
-body.inspecting main{opacity:.02;pointer-events:none;transition:opacity .4s}
-main{transition:opacity .4s}
-#skip{position:fixed;right:var(--gut);bottom:24px;z-index:6;font:600 12px var(--mono);color:var(--muted);background:transparent;border:1px solid var(--line-2);border-radius:999px;padding:7px 12px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s}
-body.intro #skip{opacity:1;pointer-events:auto}
-
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  .hero .stack{animation:none}
-  .plate,.stack{transition:none}
-}
+.contact{padding:clamp(110px,14vw,190px) 0 70px}
+.contact h2{font:500 clamp(44px,7vw,108px)/.95 var(--sans);letter-spacing:-.045em;margin:0 0 26px}
+.contact h2 span{color:var(--muted)}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:70px;padding-top:18px;border-top:1px solid var(--line);font:400 12.5px var(--mono);color:var(--muted)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
-<body data-track="all">
+<body>
 <canvas id="gl" aria-hidden="true"></canvas>
-<div id="hot" aria-hidden="true"></div>
-<div id="inspect" role="dialog" aria-label="Layer inspector"><span class="k" id="insK"></span><h3 id="insH"></h3><p id="insP"></p><button class="btn" id="insX" type="button">Back to the page</button></div>
-<button id="skip" type="button">Skip intro</button>
 
 <header class="top">
   <a class="me" href="#top">Karandev Chauhan</a>
-  <nav aria-label="Sections"><a href="#stack">The stack</a><a href="#tools">Tools</a><a href="#record">Record</a><a class="mail" href="#contact">Contact</a></nav>
+  <nav aria-label="Sections"><a href="#tools">Tools</a><a href="#record">Record</a><a class="k" href="#contact">Contact</a></nav>
 </header>
 
-<main class="wrap" id="top">
-  <section class="hero" aria-labelledby="h1">
-    <div>
-      <h1 id="h1">From the pin <em>to the</em> policy.</h1>
-      <p class="lede">I build every layer of a device, from the circuit board and firmware up to the network and the login, and I secure every one of them.</p>
+<div id="veil" aria-hidden="true"></div>
+<div id="hud">
+  <div id="cap">
+    <div class="shade" aria-hidden="true"></div>
+    <section class="cp on" data-i="0" aria-labelledby="c0">
+      <span class="k">KARANDEV CHAUHAN · SECURITY, IAM &amp; EMBEDDED HARDWARE</span>
+      <h1 id="c0">From the pin <span>to the policy.</span></h1>
+      <p>Every system I secure starts here: a signal on one pin of one chip. Scroll out to the building, then back inside to see how it's secured.</p>
+      <div class="cta"><a class="btn primary" href="mailto:ckarandev010@gmail.com">Email me</a><a class="btn" href="#tools">Skip to the work</a></div>
+    </section>
+    <section class="cp" data-i="1" aria-labelledby="c1">
+      <span class="k">THE CHIP</span>
+      <h2 id="c1">Firmware that looks after itself.</h2>
+      <ul>
+        <li><b>ESP32-S3</b> firmware in C on FreeRTOS: sensor data over UART, BLE, deep-sleep wake on motion.</li>
+        <li><b>Fault detection with automatic recovery</b>, and over-the-air updates. Each avoided site visit saves about half a day.</li>
+        <li>I also wrote <a href="https://github.com/ckarandev010/preflash" rel="noopener">preflash</a>, which finds the boot, encryption and OTA settings firmware ships with switched off.</li>
+      </ul>
+    </section>
+    <section class="cp" data-i="2" aria-labelledby="c2">
+      <span class="k">THE BOARD</span>
+      <h2 id="c2">Power, on its own.</h2>
+      <ul>
+        <li>Carrier PCB in <b>KiCad</b>, brought up with a scope and a multimeter.</li>
+        <li>Battery power: <b>cell pack, BMS, buck-boost</b> and a current-limited load switch. No wiring run to the door.</li>
+      </ul>
+    </section>
+    <section class="cp" data-i="3" aria-labelledby="c3">
+      <span class="k">THE DOOR</span>
+      <h2 id="c3">Where the real world disagrees.</h2>
+      <ul>
+        <li>Enclosures in <b>FreeCAD</b>, mounted at real doors next to the reader, lock and panel.</li>
+        <li>On go-live day the electric lock was corrupting the sensor link. I traced it on site and redesigned the link the same day; the launch went ahead on time.</li>
+      </ul>
+    </section>
+    <section class="cp" data-i="4" aria-labelledby="c4">
+      <span class="k">THE BUILDING</span>
+      <h2 id="c4">Every device, known.</h2>
+      <ul>
+        <li>An access-control system (card and face readers, electric locks, control panels) live at a commercial site.</li>
+        <li>My own <b>MDM</b> for about 40 devices, patched on a fixed schedule. <b>RHEL inside Active Directory</b>, hardened and then attacked.</li>
+      </ul>
+    </section>
+    <section class="cp" data-i="5" aria-labelledby="c5">
+      <span class="k">INSIDE · THE NETWORK</span>
+      <h2 id="c5">What's kept apart.</h2>
+      <ul>
+        <li><b>VLAN segmentation</b> for staff, guest, server, IoT and remote; remote access over a VPN moved to AWS.</li>
+        <li><b>SCADA / Modbus</b> integration on real factory systems; PLCs programmed and pen-tested.</li>
+      </ul>
+    </section>
+    <section class="cp" data-i="6" aria-labelledby="c6">
+      <span class="k">INSIDE · THE POLICY</span>
+      <h2 id="c6">Who gets in. <span>And who doesn't.</span></h2>
+      <ul>
+        <li><b>Okta</b> for a team of about 15: single sign-on, MFA, and SCIM provisioning that removes access the day someone leaves.</li>
+        <li>Tied into <b>Active Directory</b> and Group Policy.</li>
+      </ul>
+      <div class="cta"><a class="btn primary" href="mailto:ckarandev010@gmail.com">Let's talk</a><a class="btn" href="#tools">See the tools</a></div>
+    </section>
+  </div>
+  <div id="scale" aria-hidden="true"><div><div class="n" id="sn">10<sup>−4</sup></div></div><div class="bar"></div><div class="u" id="su">0.1 mm</div></div>
+  <div class="hint" id="hint" aria-hidden="true">scroll to zoom out</div>
+</div>
+
+<main id="top">
+  <div class="zoom" id="zoom" aria-hidden="true"></div>
+
+  <div class="after">
+  <div class="wrap">
+    <section class="sec" id="tools" aria-labelledby="toolsH">
+      <div class="sec-h"><h2 id="toolsH">Open-source tools.</h2><p>Public on GitHub, each with a measured result.</p></div>
+      <div class="tools">
+        <div class="tool"><h3>preflash<small>Python · ESP-IDF</small></h3><p>Finds the security settings an ESP32 firmware project left off before it ships, mapped to ETSI EN 303 645 and the OWASP IoT Top 10.</p><div class="pr">453 example projects: BLE Secure Connections off in 10, TLS hostname checks skipped in 6</div><a class="go" href="https://github.com/ckarandev010/preflash" rel="noopener">GitHub</a></div>
+        <div class="tool"><h3>readykit<small>Python · Windows</small></h3><p>A free cyber-readiness self-check for Canadian small businesses.</p><div class="pr">11 checks + 11 questions, mapped to CPCSC Level 1, CyberSecure Canada and ISO 27001</div><a class="go" href="https://github.com/ckarandev010/readykit" rel="noopener">GitHub</a></div>
+        <div class="tool"><h3>mmWave Config Lab<small>JavaScript · Windows app</small></h3><p>Checks TI mmWave radar config files and shows what a config will actually do.</p><div class="pr">Rules from TI's own source; all 55 TI example configs pass</div><a class="go" href="https://github.com/ckarandev010/mmwave-config-lab" rel="noopener">GitHub</a></div>
+        <div class="tool"><h3>softtarget<small>Python · local LLM</small></h3><p>A deliberately vulnerable AI web app to practise attacks on, running on a local model.</p><div class="pr">4 labs × 4 levels on the OWASP LLM Top 10 (2025)</div><a class="go" href="https://github.com/ckarandev010/softtarget" rel="noopener">GitHub</a></div>
+        <div class="tool"><h3>didit<small>Python · AI agents</small></h3><p>Checks an AI coding agent's "done" summary against the tool calls it really made.</p><div class="pr">87% of false claims caught, 0% false alarms on a held-out benchmark</div><a class="go" href="https://github.com/ckarandev010/didit" rel="noopener">GitHub</a></div>
+        <div class="tool"><h3>gmail-mcp<small>Python · MCP</small></h3><p>Lets an AI assistant work with two Gmail accounts, least-privilege from the start.</p><div class="pr">Read + compose scopes only; sends only on request</div><a class="go" href="https://github.com/ckarandev010/gmail-mcp-multi-account" rel="noopener">GitHub</a></div>
+      </div>
+    </section>
+    <section class="sec" aria-labelledby="storyH">
+      <div class="story">
+        <div><h3 id="storyH">How the door learns who's walking up.</h3><p>An interactive walk-through of the machine-learning system I built at GateKeypers: the data, two models compared, and an honest look at how good it is and where it still falls short.</p></div>
+        <a class="btn" href="https://ckarandev010.github.io/gatebeat/" rel="noopener">Read the story</a>
+      </div>
+    </section>
+    <section class="sec" id="record" aria-labelledby="recH">
+      <div class="sec-h"><h2 id="recH">Record.</h2><p>Where I've worked and studied.</p></div>
+      <div class="record">
+        <div class="rec"><b>Head of Hardware, GateKeypers Inc.</b><span>Access-control technology startup, Toronto</span><i>2025 – now</i></div>
+        <div class="rec"><b>Security Analyst Intern, Forenzy Networks</b><span>SIEM alerts, firewall logs, incident reports</span><i>2023</i></div>
+        <div class="rec"><b>Cybersecurity &amp; Threat Management</b><span>Graduate certificate · Seneca College · President's Honour List</span><i>2025</i></div>
+        <div class="rec"><b>Cybersecurity</b><span>Graduate certificate · Durham College · GPA 4.6 / 5.0</span><i>2025</i></div>
+        <div class="rec"><b>Bachelor's in Computer Science</b><span>Navrachana University, India · 4-year programme</span><i>2023</i></div>
+        <div class="rec"><b>Diploma, Computer Science &amp; Engineering</b><span>Parul University, India</span><i>2020</i></div>
+      </div>
+    </section>
+    <section class="contact" id="contact" aria-labelledby="cH">
+      <h2 id="cH">Let's talk. <span>Security, IAM and embedded roles in the GTA.</span></h2>
       <div class="cta">
-        <a class="btn primary" href="mailto:ckarandev010@gmail.com">Email me</a>
-        <a class="btn" href="#stack"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v11M3 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Take it apart</a>
+        <a class="btn primary" href="mailto:ckarandev010@gmail.com">ckarandev010@gmail.com</a>
+        <a class="btn" href="https://github.com/ckarandev010" rel="noopener">GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/karandevsinh-chauhan-a813181aa" rel="noopener">LinkedIn</a>
       </div>
-      <div class="paths"><span>Open to roles in</span><a href="#security">security &amp; IAM</a><a href="#hardware">embedded hardware</a></div>
-      <p class="status">Greater Toronto Area · open work permit · available now</p>
-    </div>
-    <div class="stage" id="heroStage" aria-hidden="true"><div class="shadow"></div><div class="stack"></div></div>
-  </section>
-
-  <section class="layers" id="stack" aria-label="The stack, layer by layer">
-    <div class="pin">
-      <div class="stage open" id="stage" aria-hidden="true"><div class="shadow"></div><div class="beam" id="beam"></div><div class="stack"></div></div>
-      <div class="ctl">
-        <div class="atk" role="group" aria-label="Run a pen test: pick an attack">
-          <span class="atk-l">Run a pen test</span>
-          <button type="button" data-atk="phish">Phishing login</button>
-          <button type="button" data-atk="leaver">Ex-employee logs in</button>
-          <button type="button" data-atk="laptop">Stolen laptop</button>
-          <button type="button" data-atk="rogue">Rogue device on Wi-Fi</button>
-          <button type="button" data-atk="exploit">Old exploit</button>
-          <button type="button" data-atk="firmware">Tampered firmware</button>
-          <button type="button" data-atk="badge">Stolen badge</button>
-        </div>
-        <div class="result" id="result" role="status" aria-live="polite"><span class="dim">Pick an attack. Each one is a walk through the control that stops it, not a real attack. Click any layer to inspect it.</span></div>
-      </div>
-    </div>
-    <div class="steps">
-      <article class="layer" id="identity" data-l="5" data-tracks="security" style="--c:var(--l-id)">
-        <span class="idx">Layer 6 · Identity</span>
-        <h2>Who gets in.</h2>
-        <p class="plain">And who gets taken out the day they leave.</p>
-        <ul>
-          <li>I administer <b>Okta</b> for a team of about 15: single sign-on, <b>MFA</b>, sign-on and password policies.</li>
-          <li>New hires set up, access changed when roles change, and removed on departure through <b>SCIM provisioning and deprovisioning</b>.</li>
-          <li>Okta tied into <b>Active Directory</b>, where I also manage Group Policy. Resets, lockouts and login problems handled and documented.</li>
-        </ul>
-        <div class="proof"><span>stops</span> a leaver's logins: revoked by SCIM, not by memory</div>
-      </article>
-      <article class="layer" id="devices" data-l="4" data-tracks="security" style="--c:var(--l-dev)">
-        <span class="idx">Layer 5 · Devices</span>
-        <h2>What's allowed on.</h2>
-        <p class="plain">Every laptop, terminal and server, known and patched.</p>
-        <ul>
-          <li>I built and run the company's own <b>device-management (MDM) software</b> for <b>about 40 devices</b>: Windows, macOS, Linux and Android access-control terminals.</li>
-          <li>The development environment runs on <b>Red Hat Enterprise Linux inside Active Directory</b>, automated with Ansible. I harden it, then attack it myself.</li>
-        </ul>
-        <div class="proof"><span>stops</span> the unpatched laptop: ~40 devices, patched Wed + Fri</div>
-      </article>
-      <article class="layer" id="network" data-l="3" data-tracks="security" style="--c:var(--l-net)">
-        <span class="idx">Layer 4 · Network</span>
-        <h2>What's kept apart.</h2>
-        <p class="plain">How things connect, and what can't reach what.</p>
-        <ul>
-          <li>Designed <b>VLAN segmentation</b> on Ubiquiti gear: staff, guest, server, IoT and remote.</li>
-          <li>Remote devices tunnel in over <b>OpenVPN</b>: first on Proxmox, then moved to AWS because the office had no static IP.</li>
-          <li>Integrated our devices with real factory systems over <b>SCADA / Modbus</b>; programmed PLCs in ladder logic and <b>pen-tested them</b>.</li>
-        </ul>
-        <div class="proof"><span>stops</span> a guest laptop reaching the server: separate VLANs</div>
-      </article>
-      <article class="layer" id="firmware" data-l="2" data-tracks="hardware security" style="--c:var(--l-fw)">
-        <span class="idx">Layer 3 · Firmware</span>
-        <h2>The code inside.</h2>
-        <p class="plain">And fixing it when the real world disagrees with the bench.</p>
-        <ul>
-          <li>Firmware in <b>C on FreeRTOS</b> (ESP-IDF, ESP32-S3): sensor data over UART, BLE, power control, deep-sleep wake on motion, <b>over-the-air updates</b>.</li>
-          <li><b>Fault detection with automatic recovery</b>: every site visit it avoids saves about half a day.</li>
-          <li>On go-live day the door's electric lock was corrupting the sensor link. I traced it on site and redesigned the link the same day; the launch went ahead.</li>
-        </ul>
-        <div class="proof"><span>built</span> <a href="https://github.com/ckarandev010/preflash" rel="noopener">preflash</a>: finds secure boot, flash encryption and OTA settings left off · 453 projects scanned</div>
-      </article>
-      <article class="layer" id="board" data-l="1" data-tracks="hardware" style="--c:var(--l-pcb)">
-        <span class="idx">Layer 2 · Board + power</span>
-        <h2>The board it runs on.</h2>
-        <p class="plain">Making it run on a battery, on a board I drew.</p>
-        <ul>
-          <li>Battery power for field units: <b>cell pack, BMS, buck-boost, current-limited load switch</b>.</li>
-          <li>Carrier PCB in <b>KiCad</b>; bring-up with oscilloscope and multimeter. I solder my own boards.</li>
-          <li>Radar tooling: <a href="https://github.com/ckarandev010/mmwave-config-lab" rel="noopener">mmWave Config Lab</a> checks TI radar configs before they reach the chip; all 55 of TI's example configs pass.</li>
-        </ul>
-        <div class="proof"><span>survives</span> a sensor fault: the unit detects it and recovers on its own</div>
-      </article>
-      <article class="layer" id="enclosure" data-l="0" data-tracks="hardware" style="--c:var(--l-enc)">
-        <span class="idx">Layer 1 · Enclosure + door</span>
-        <h2>The box, and the door.</h2>
-        <p class="plain">Where the device meets a wall, a lock and a person.</p>
-        <ul>
-          <li>Enclosures designed in <b>FreeCAD</b> for units mounted at real doors.</li>
-          <li>Built an access-control system (card and face readers, electric locks, control panels) running at a live commercial site; I onboard the people who use it.</li>
-          <li>Personal build: <b>RFID card plus one-time code</b> on a Raspberry Pi. Something you have and something you know.</li>
-        </ul>
-        <div class="proof"><span>stops</span> a stolen card: it still needs the one-time code</div>
-      </article>
-    </div>
-  </section>
-
-  <section id="tools" aria-labelledby="toolsH">
-    <div class="sec-h"><h2 id="toolsH">Tools I built to test the layers.</h2><p>All public on GitHub. Each one checks a layer for something people forget.</p></div>
-    <div class="tools">
-      <div class="tool" data-tracks="security"><h3><span class="dots"><i style="background:var(--l-dev)"></i></span>readykit<small>Python · Windows</small></h3><p>A free cyber-readiness self-check for Canadian small businesses: automated checks plus the questions only an owner can answer.</p><div class="pr">11 checks + 11 questions, mapped to CPCSC Level 1, CyberSecure Canada and ISO 27001</div><a class="go" href="https://github.com/ckarandev010/readykit" rel="noopener">GitHub</a></div>
-      <div class="tool" data-tracks="hardware security"><h3><span class="dots"><i style="background:var(--l-fw)"></i></span>preflash<small>Python · ESP-IDF</small></h3><p>Finds the security settings an ESP32 firmware project left off before it ships.</p><div class="pr">453 example projects: BLE Secure Connections off in 10, TLS hostname checks skipped in 6</div><a class="go" href="https://github.com/ckarandev010/preflash" rel="noopener">GitHub</a></div>
-      <div class="tool" data-tracks="security"><h3><span class="dots"><i style="background:var(--l-id)"></i></span>softtarget<small>Python · local LLM</small></h3><p>A deliberately vulnerable AI web app to practise attacks on, like DVWA for LLMs, running on a local model.</p><div class="pr">4 labs × 4 levels on the OWASP LLM Top 10 (2025)</div><a class="go" href="https://github.com/ckarandev010/softtarget" rel="noopener">GitHub</a></div>
-      <div class="tool" data-tracks="security"><h3><span class="dots"><i style="background:var(--l-id)"></i></span>didit<small>Python · AI agents</small></h3><p>Checks an AI coding agent's "done" summary against the tool calls it really made.</p><div class="pr">87% of false claims caught, 0% false alarms on a held-out benchmark</div><a class="go" href="https://github.com/ckarandev010/didit" rel="noopener">GitHub</a></div>
-      <div class="tool" data-tracks="security"><h3><span class="dots"><i style="background:var(--l-id)"></i></span>gmail-mcp<small>Python · MCP</small></h3><p>Lets an AI assistant work with two Gmail accounts, least-privilege from the start.</p><div class="pr">Read + compose scopes only; sends only on request; blocked domains enforced in code</div><a class="go" href="https://github.com/ckarandev010/gmail-mcp-multi-account" rel="noopener">GitHub</a></div>
-      <div class="tool" data-tracks="hardware"><h3><span class="dots"><i style="background:var(--l-pcb)"></i></span>mmWave Config Lab<small>JavaScript · Windows app</small></h3><p>Checks TI mmWave radar config files and shows what a config will actually do: range, speed, timing.</p><div class="pr">Rules from TI's own source; all 55 TI example configs pass</div><a class="go" href="https://github.com/ckarandev010/mmwave-config-lab" rel="noopener">GitHub</a></div>
-    </div>
-  </section>
-
-  <section class="story" aria-labelledby="storyH">
-    <div class="t">
-      <h2 id="storyH">How the door learns who's walking up.</h2>
-      <p>An interactive walk-through of the machine-learning system I built at GateKeypers: collecting and cleaning the data, two models compared, and an honest look at how good it is and where it still falls short.</p>
-      <a class="btn" href="https://ckarandev010.github.io/gatebeat/" rel="noopener">Read the story</a>
-    </div>
-    <div class="art" aria-hidden="true">
-      <svg viewBox="0 0 400 280" preserveAspectRatio="xMidYMid meet"><g fill="none" stroke="#c2c9d2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="20" y1="240" x2="380" y2="240" stroke-width="2"/>
-        <rect x="270" y="60" width="80" height="180" rx="3" stroke-width="2.5"/><circle cx="335" cy="150" r="3" fill="#c2c9d2"/>
-        <rect x="244" y="118" width="14" height="22" rx="3" stroke-width="2"/><circle cx="251" cy="125" r="3" fill="#45d483" stroke="none"/>
-        <g stroke-width="2.5"><circle cx="90" cy="96" r="11"/><path d="M90 108 L86 168 M86 168 L70 240 M86 168 L110 236 M88 124 L66 156 M88 124 L114 150"/></g>
-        <g stroke-width="2.5" opacity=".45"><circle cx="170" cy="96" r="11"/><path d="M170 108 L170 168 M170 168 L150 236 M170 168 L190 240 M170 124 L148 152 M170 124 L194 154"/></g>
-        <path d="M40 258 H236" stroke="#a98bff" stroke-dasharray="3 7" stroke-width="2"/>
-      </g></svg>
-    </div>
-  </section>
-
-  <section id="record" aria-labelledby="recH">
-    <div class="sec-h"><h2 id="recH">Where I learned it.</h2><p>And the jobs where I used it.</p></div>
-    <div class="record">
-      <div class="rec"><b>Head of Hardware, GateKeypers Inc.</b><span>Access-control technology startup, Toronto</span><i>Jun 2025 – now</i></div>
-      <div class="rec"><b>Security Analyst Intern, Forenzy Networks</b><span>SIEM alerts, firewall logs, incident reports, scanning support</span><i>2023</i></div>
-      <div class="rec"><b>Cybersecurity &amp; Threat Management</b><span>Graduate certificate · Seneca College · President's Honour List</span><i>2025</i></div>
-      <div class="rec"><b>Cybersecurity</b><span>Graduate certificate · Durham College · GPA 4.6 / 5.0</span><i>2025</i></div>
-      <div class="rec"><b>Bachelor's in Computer Science</b><span>Navrachana University, India · 4-year programme, lateral entry</span><i>2023</i></div>
-      <div class="rec"><b>Diploma, Computer Science &amp; Engineering</b><span>Parul University, India</span><i>2020</i></div>
-    </div>
-  </section>
-
-  <section class="contact" id="contact" aria-labelledby="cH">
-    <h2 id="cH">Every layer. <em>Your team?</em></h2>
-    <p>Let's talk.</p>
-    <div class="links">
-      <a class="btn primary" href="mailto:ckarandev010@gmail.com">ckarandev010@gmail.com</a>
-      <a class="btn" href="https://github.com/ckarandev010" rel="noopener">GitHub</a>
-      <a class="btn" href="https://www.linkedin.com/in/karandevsinh-chauhan-a813181aa" rel="noopener">LinkedIn</a>
-    </div>
-    <div class="foot"><span>Oshawa / Toronto, ON</span><span>Karandev Chauhan</span></div>
-  </section>
+      <div class="foot"><span>Oshawa / Toronto, ON · open work permit</span><span>Karandev Chauhan</span></div>
+    </section>
+  </div>
+  </div>
 </main>
-
-<script>
-(function(){
-  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var NS='http://www.w3.org/2000/svg';
-  function rnd(seed){return function(){seed=(seed*9301+49297)%233280;return seed/233280}}
-  function enclosure(){var s='<rect x="2" y="2" width="356" height="246" rx="14" fill="#2a2f37" stroke="#d7dbe2" stroke-opacity=".55" stroke-width="2"/>'+
-    '<rect x="16" y="16" width="328" height="218" rx="9" fill="#1f242b" stroke="#d7dbe2" stroke-opacity=".25"/>';
-    [[28,28],[332,28],[28,222],[332,222]].forEach(function(p){s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="6" fill="#14181d" stroke="#d7dbe2" stroke-opacity=".5"/>'});
-    for(var i=0;i<7;i++)s+='<rect x="'+(60+i*14)+'" y="196" width="6" height="26" rx="3" fill="#14181d"/>';
-    s+='<rect x="236" y="70" width="70" height="104" rx="8" fill="#0f1216" stroke="#d7dbe2" stroke-opacity=".5"/><circle cx="271" cy="96" r="5" fill="#45d483"/><rect x="248" y="118" width="46" height="40" rx="4" fill="none" stroke="#d7dbe2" stroke-opacity=".35"/>';
-    return s}
-  function board(){var r=rnd(7),s='<rect x="2" y="2" width="356" height="246" rx="12" fill="#0c3b22" stroke="#3ccf6a" stroke-opacity=".6" stroke-width="2"/>';
-    for(var i=0;i<26;i++){var x=20+r()*320|0,y=20+r()*210|0,x2=20+r()*320|0,y2=20+r()*210|0;s+='<path d="M'+x+' '+y+' H'+((x+x2)/2|0)+' V'+y2+' H'+x2+'" fill="none" stroke="#d8a24a" stroke-opacity=".7" stroke-width="2"/><circle cx="'+x2+'" cy="'+y2+'" r="3" fill="#d8a24a"/>'}
-    s+='<rect x="140" y="80" width="80" height="80" rx="4" fill="#111" stroke="#555"/>';for(var k=0;k<8;k++){s+='<rect x="'+(146+k*9)+'" y="72" width="4" height="8" fill="#c9c9c9"/><rect x="'+(146+k*9)+'" y="160" width="4" height="8" fill="#c9c9c9"/>'}
-    s+='<rect x="40" y="150" width="70" height="70" rx="35" fill="#2d6bd6" stroke="#9cc0ff" stroke-opacity=".6"/><text x="75" y="190" fill="#e8f0ff" font-family="JetBrains Mono" font-size="12" text-anchor="middle">CELL</text>'+
-      '<rect x="250" y="160" width="60" height="34" rx="3" fill="#111" stroke="#555"/><text x="280" y="181" fill="#9aa3ae" font-family="JetBrains Mono" font-size="10" text-anchor="middle">BMS</text>';return s}
-  function firmware(){var r=rnd(3),s='<rect x="2" y="2" width="356" height="246" rx="12" fill="#0d1f22" stroke="#5fe0c8" stroke-opacity=".6" stroke-width="2"/>';
-    for(var i=0;i<14;i++){var x=22+(r()*3|0)*16,w=60+r()*200|0;s+='<rect x="'+x+'" y="'+(22+i*15)+'" width="'+w+'" height="6" rx="3" fill="'+(r()>.75?'#5fe0c8':'#3c5a5e')+'"/>'}
-    s+='<rect x="268" y="150" width="64" height="74" rx="8" fill="#0a1517" stroke="#5fe0c8" stroke-width="2"/><path d="M282 150 v-14 a18 18 0 0 1 36 0 v14" fill="none" stroke="#5fe0c8" stroke-width="3"/><circle cx="300" cy="186" r="6" fill="#5fe0c8"/>';return s}
-  function network(){var s='<rect x="2" y="2" width="356" height="246" rx="12" fill="#0c1a2c" stroke="#4fb4ff" stroke-opacity=".6" stroke-width="2"/>';
-    var z=[['STAFF',20,20],['GUEST',184,20],['SERVER',20,130],['IoT',184,130]];
-    z.forEach(function(q){s+='<rect x="'+q[1]+'" y="'+q[2]+'" width="152" height="96" rx="8" fill="#10253f" stroke="#4fb4ff" stroke-opacity=".55" stroke-dasharray="6 5"/><text x="'+(q[1]+12)+'" y="'+(q[2]+22)+'" fill="#4fb4ff" font-family="JetBrains Mono" font-size="11" font-weight="600">VLAN · '+q[0]+'</text>';
-      for(var i=0;i<3;i++)s+='<rect x="'+(q[1]+16+i*44)+'" y="'+(q[2]+44)+'" width="30" height="22" rx="3" fill="#1a3a60"/>'});
-    s+='<path d="M180 116 C 230 116, 300 116, 340 8" fill="none" stroke="#ffd166" stroke-width="2.5" stroke-dasharray="2 6" stroke-linecap="round"/>';return s}
-  function devices(){var s='<rect x="2" y="2" width="356" height="246" rx="12" fill="#26121b" stroke="#ff8fb1" stroke-opacity=".6" stroke-width="2"/>';
-    for(var r=0;r<3;r++)for(var c=0;c<5;c++){var x=22+c*66,y=22+r*74;var k=(r*5+c)%3;
-      if(k===0)s+='<rect x="'+x+'" y="'+(y+8)+'" width="50" height="32" rx="3" fill="#3a1d2a" stroke="#ff8fb1" stroke-opacity=".6"/><rect x="'+(x-4)+'" y="'+(y+40)+'" width="58" height="5" rx="2" fill="#ff8fb1" fill-opacity=".5"/>';
-      else if(k===1)s+='<rect x="'+(x+12)+'" y="'+y+'" width="26" height="46" rx="5" fill="#3a1d2a" stroke="#ff8fb1" stroke-opacity=".6"/>';
-      else s+='<rect x="'+(x+4)+'" y="'+(y+2)+'" width="42" height="42" rx="4" fill="#3a1d2a" stroke="#ff8fb1" stroke-opacity=".6"/><line x1="'+(x+10)+'" y1="'+(y+14)+'" x2="'+(x+40)+'" y2="'+(y+14)+'" stroke="#ff8fb1" stroke-opacity=".5"/>';
-      s+='<circle cx="'+(x+50)+'" cy="'+(y+4)+'" r="7" fill="#45d483"/><path d="M'+(x+46.5)+' '+(y+4)+' l2.5 2.5 l4.5 -5" fill="none" stroke="#0b0d10" stroke-width="2"/>'}
-    return s}
-  function identity(){var s='<rect x="2" y="2" width="356" height="246" rx="12" fill="#1a1430" stroke="#a98bff" stroke-opacity=".6" stroke-width="2"/>';
-    var cx=180,cy=125,pts=[[50,50],[110,30],[250,30],[310,50],[40,200],[110,220],[250,220],[320,200]];
-    pts.forEach(function(p){s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="#a98bff" stroke-opacity=".45" stroke-width="1.5"/><circle cx="'+p[0]+'" cy="'+(p[1]-6)+'" r="8" fill="#2d2350" stroke="#a98bff"/><path d="M'+(p[0]-11)+' '+(p[1]+14)+' a11 9 0 0 1 22 0" fill="#2d2350" stroke="#a98bff"/>'});
-    s+='<circle cx="'+cx+'" cy="'+cy+'" r="38" fill="#2d2350" stroke="#a98bff" stroke-width="2.5"/><path d="M'+cx+' '+(cy-20)+' l18 7 v12 c0 12 -8 20 -18 24 c-10 -4 -18 -12 -18 -24 v-12 z" fill="#a98bff"/>';return s}
-  var arts=[enclosure,board,firmware,network,devices,identity];
-  window.__kcArts={arts:arts,colors:['#d7dbe2','#3ccf6a','#5fe0c8','#4fb4ff','#ff8fb1','#a98bff']};
-  var names=['ENCLOSURE + DOOR','BOARD + POWER','FIRMWARE','NETWORK','DEVICES','IDENTITY'];
-  var colors=['var(--l-enc)','var(--l-pcb)','var(--l-fw)','var(--l-net)','var(--l-dev)','var(--l-id)'];
-  var tags=['BLOCKED · CARD + ONE-TIME CODE','RECOVERED · FAULT, SELF-RESTART','CHECKED · PREFLASH RULES','BLOCKED · VLAN SEGMENTATION','BLOCKED · PATCHED WED + FRI','BLOCKED · MFA + SCIM OFF-BOARDING'];
-  function build(stack,withLabels){for(var i=0;i<6;i++){var p=document.createElement('div');p.className='plate';p.style.setProperty('--i',i);p.style.setProperty('--c',colors[i]);
-      var svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 360 250');svg.innerHTML=arts[i]();p.appendChild(svg);
-      if(withLabels){var l=document.createElement('span');l.className='lbl';l.textContent=names[i];p.appendChild(l);var t=document.createElement('span');t.className='tag';t.textContent=tags[i];p.appendChild(t)}
-      stack.appendChild(p)}return [].slice.call(stack.children)}
-  build(document.querySelector('#heroStage .stack'),false).forEach(function(p){p.style.setProperty('--gap','16px')});
-  var stage=document.getElementById('stage'),plates=build(stage.querySelector('.stack'),true);
-
-  var stepsEl=document.querySelector('.steps'),layers=[].slice.call(document.querySelectorAll('.layer'));
-  function onScroll(){var r=stepsEl.getBoundingClientRect(),vh=innerHeight;
-    var p=Math.min(1,Math.max(0,(vh*0.6-r.top)/(vh*0.9)));var gap=16+p*(innerWidth<900?34:50);
-    plates.forEach(function(pl){pl.style.setProperty('--gap',gap+'px')});}
-  addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll);onScroll();
-  var active=-1;
-  function setActive(i){if(i===active)return;active=i;dispatchEvent(new CustomEvent('kc-layer',{detail:i}));stage.classList.toggle('dim',i>=0);plates.forEach(function(pl,k){pl.classList.toggle('on',k===i)});
-    if(i>=0)document.documentElement.style.setProperty('--acc',colors[i])}
-  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)setActive(+e.target.getAttribute('data-l'))})},{rootMargin:'-45% 0px -45% 0px'});layers.forEach(function(l){io.observe(l)});
-    new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)setActive(-1)})}).observe(stepsEl)}
-
-  var res=document.getElementById('result'),beam=document.getElementById('beam'),running=false;
-  var ATK={
-    phish:[[5,'block','Identity','Password stolen by a fake login page. Still needs MFA: BLOCKED.']],
-    leaver:[[5,'block','Identity','Their account was removed by SCIM the day they left: BLOCKED.']],
-    laptop:[[4,'pass','Devices','The laptop is in the attacker\'s hands.'],[5,'block','Identity','No sign-in without MFA: BLOCKED.']],
-    rogue:[[3,'block','Network','Lands on the guest VLAN, which can\'t reach the server: BLOCKED.']],
-    exploit:[[4,'block','Devices','A known bug, but every device is patched Wed + Fri: BLOCKED.']],
-    firmware:[[2,'block','Firmware','OTA over plain HTTP, boot settings left off: preflash checks for exactly this before shipping.']],
-    badge:[[0,'pass','Door','The stolen card reads fine.'],[0,'block','Door','Still needs the one-time code (my two-factor door build): BLOCKED.']]
-  };
-  var atkBtns=[].slice.call(document.querySelectorAll('.atk button'));
-  function addLine(cls,txt){var d=document.createElement('div');var b=document.createElement('span');b.className=cls;b.textContent=cls==='block'?'BLOCKED ':cls==='pass'?'PASSED  ':'';d.appendChild(b);d.appendChild(document.createTextNode(txt));res.appendChild(d)}
-  atkBtns.forEach(function(b){b.addEventListener('click',function(){if(running)return;running=true;var steps=ATK[b.getAttribute('data-atk')];
-    atkBtns.forEach(function(x){x.disabled=x!==b;x.setAttribute('aria-pressed',x===b?'true':'false')});
-    setActive(-1);stage.classList.remove('dim');stage.classList.add('attacking');res.innerHTML='';
-    var d0=document.createElement('div');d0.className='dim';d0.textContent='> '+b.textContent;res.appendChild(d0);
-    var k=0,step=reduce?0:1100;
-    (function next(){if(k>=steps.length){setTimeout(function(){running=false;stage.classList.remove('attacking');atkBtns.forEach(function(x){x.disabled=false;x.setAttribute('aria-pressed','false')});
-        dispatchEvent(new CustomEvent('kc-hit',{detail:{i:-1}}));plates.forEach(function(p){p.classList.remove('hit','cur')});
-        var f=document.createElement('div');f.innerHTML='<span class="ok">RESULT  </span>stopped at one layer, with more behind it.';res.appendChild(f)},reduce?0:900);return}
-      var st=steps[k++];dispatchEvent(new CustomEvent('kc-hit',{detail:{i:st[0],kind:st[1]}}));
-      plates.forEach(function(p){p.classList.remove('cur')});plates[st[0]].classList.add('hit','cur');
-      addLine(st[1],st[2]+' · '+st[3]);setTimeout(next,step||1)})()})});
-
-  var tools=[].slice.call(document.querySelectorAll('.tool'));
-  function setTrack(t){if(t!=='security'&&t!=='hardware')t='all';document.body.setAttribute('data-track',t);
-    tools.forEach(function(el){el.classList.toggle('hide',t!=='all'&&el.getAttribute('data-tracks').indexOf(t)<0)});
-    layers.forEach(function(el){el.classList.toggle('dim-track',t!=='all'&&el.getAttribute('data-tracks').indexOf(t)<0)})}
-  function fromHash(jump){var h=location.hash.slice(1);if(h==='security'||h==='hardware'){setTrack(h);if(jump)document.getElementById(h==='security'?'identity':'firmware').scrollIntoView({behavior:reduce?'auto':'smooth'})}}
-  fromHash(true);addEventListener('hashchange',function(){fromHash(true)});
-})();
-</script>
 
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module">
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
-import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
-import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
-import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
-import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const caps=[...document.querySelectorAll('.cp')],sn=document.getElementById('sn'),su=document.getElementById('su'),hint=document.getElementById('hint'),hud=document.getElementById('hud');
+// log10 of camera distance (metres) at each stop: pin, chip, board, door, building, network, policy
+const STOPS=[-2.15,-1.35,-0.7,0.78,1.85,0.35,-0.05];
+const zoomEl=document.getElementById('zoom');
+function prog(){const r=zoomEl.getBoundingClientRect();return Math.min(1,Math.max(0,-r.top/(r.height-innerHeight)))}
+function stopAt(p){return p*(STOPS.length-1)}
+function fmt(m){if(m<1e-3)return(m*1e6).toFixed(0)+' µm';if(m<1)return(m*1e3).toFixed(m<1e-2?1:0)+' mm';if(m<1000)return m.toFixed(m<10?1:0)+' m';return(m/1000).toFixed(m<1e4?1:0)+' km'}
+const SUP=['⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹'];
+function sup(n){return(n<0?'⁻':'')+String(Math.abs(n)).split('').map(d=>SUP[+d]).join('')}
+let curCap=0;
+function ui(p){const s=stopAt(p),i=Math.round(s);
+  if(i!==curCap){caps[curCap].classList.remove('on');caps[i].classList.add('on');curCap=i}
+  const sI=stopAt(p),ii=Math.min(STOPS.length-2,Math.floor(sI)),ff=sI-ii,gg=ff<.28?0:ff>.72?1:smooth((ff-.28)/.44);const lg=STOPS[ii]+(STOPS[ii+1]-STOPS[ii])*gg,e=Math.round(lg);sn.innerHTML='10<sup>'+sup(e).replace('⁻','−')+'</sup>';su.textContent=fmt(Math.pow(10,lg)*.25);
+  hint.style.opacity=p>.02?0:1;
+  const end=document.querySelector('.after').getBoundingClientRect().top;hud.style.opacity=end<innerHeight*.6?Math.max(0,(end-innerHeight*.1)/(innerHeight*.5)):1;
+  hud.style.pointerEvents=hud.style.opacity<.3?'none':''}
+function smooth(t){return t*t*(3-2*t)}
+function logDist(p){const s=stopAt(p),i=Math.min(STOPS.length-2,Math.floor(s)),f=s-i;
+  // hold near each stop, travel between stops
+  const g=f<.28?0:f>.72?1:smooth((f-.28)/.44);return STOPS[i]+(STOPS[i+1]-STOPS[i])*g}
+
 try{
 const canvas=document.getElementById('gl');
-const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));
-renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
-const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x0b0d10,16,34);
-const camera=new THREE.PerspectiveCamera(30,1,.1,100);
-scene.add(new THREE.AmbientLight(0xbfd0ff,.35));
-const key=new THREE.DirectionalLight(0xffffff,1.6);key.position.set(4,10,6);scene.add(key);
-const rimA=new THREE.PointLight(0x4fb4ff,30,20);rimA.position.set(-5,3,-3);scene.add(rimA);
-const rimB=new THREE.PointLight(0xa98bff,30,20);rimB.position.set(5,6,-4);scene.add(rimB);
+const R=new THREE.WebGLRenderer({canvas,antialias:true,logarithmicDepthBuffer:true});
+R.setPixelRatio(Math.min(devicePixelRatio,1.75));R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;R.setClearColor(0x0b0c0e,1);
+const scene=new THREE.Scene();
+const pm=new THREE.PMREMGenerator(R);scene.environment=pm.fromScene(new RoomEnvironment(),.04).texture;
+const cam=new THREE.PerspectiveCamera(34,1,1e-5,1e6);
+scene.add(new THREE.HemisphereLight(0xdfe6ff,0x2a2620,.55));
+const sun=new THREE.DirectionalLight(0xfff2dc,1.6);sun.position.set(3,6,5);scene.add(sun);
+const AMB=0xffb547;
+const M={
+  gold:new THREE.MeshStandardMaterial({color:0xd5a84e,metalness:1,roughness:.28}),
+  copper:new THREE.MeshStandardMaterial({color:0xc58a4a,metalness:1,roughness:.35}),
+  mask:new THREE.MeshStandardMaterial({color:0x1d5137,roughness:.5}),
+  can:new THREE.MeshStandardMaterial({color:0xc9ccd0,metalness:1,roughness:.3}),
+  black:new THREE.MeshStandardMaterial({color:0x17181b,roughness:.45}),
+  white:new THREE.MeshPhysicalMaterial({color:0xecebe6,roughness:.55,clearcoat:.2}),
+  wall:new THREE.MeshStandardMaterial({color:0xd9d7d0,roughness:.9}),
+  door:new THREE.MeshStandardMaterial({color:0x3a3d42,roughness:.6}),
+  ground:new THREE.MeshStandardMaterial({color:0x1a1c20,roughness:1}),
+  bldg:new THREE.MeshStandardMaterial({color:0xcfcdc6,roughness:.85}),
+  glass:new THREE.MeshStandardMaterial({color:0x22262d,roughness:.2,metalness:.4}),
+  cell:new THREE.MeshStandardMaterial({color:0x2b5bc4,roughness:.35}),
+  glow:new THREE.MeshBasicMaterial({color:AMB,toneMapped:false}),
+  line:new THREE.MeshBasicMaterial({color:AMB,toneMapped:false,transparent:true,opacity:.7})
+};
+const mm=1e-3;
+function box(w,h,d,m,x,y,z,r,parent){const g=r?new RoundedBoxGeometry(w,h,d,3,r):new THREE.BoxGeometry(w,h,d);const o=new THREE.Mesh(g,m);o.position.set(x,y,z);(parent||scene).add(o);return o}
 
-const {arts,colors}=window.__kcArts;
-const device=new THREE.Group();scene.add(device);
-const W=3.6,D=2.5,T=.12;
-const INFO=[
- {k:'Layer 1',h:'Enclosure + door',p:'Enclosures drawn in FreeCAD for units mounted at real doors, and the reader, lock and panel they work with.',spots:[[28,28,'mounting points'],[271,96,'reader window'],[95,210,'vent slots']]},
- {k:'Layer 2',h:'Board + power',p:'A carrier PCB in KiCad with battery power: cell pack, BMS, buck-boost and a current-limited load switch. Brought up on the bench with a scope and multimeter.',spots:[[180,120,'MCU · ESP32-S3'],[75,185,'Li-ion cell pack'],[280,177,'BMS + load switch']]},
- {k:'Layer 3',h:'Firmware',p:'C on FreeRTOS: sensor data over UART, BLE, deep-sleep wake on motion, over-the-air updates, and fault detection that recovers the unit on its own.',spots:[[120,70,'C · FreeRTOS · ESP-IDF'],[300,186,'boot + OTA settings (what preflash checks)'],[90,200,'self-recovery on faults']]},
- {k:'Layer 4',h:'Network',p:'Segmented VLANs for staff, guest, server, IoT and remote devices, with remote access over OpenVPN, moved to AWS for a fixed endpoint.',spots:[[96,40,'VLAN · staff'],[260,40,'VLAN · guest'],[96,150,'VLAN · server'],[260,150,'VLAN · IoT'],[330,30,'OpenVPN → AWS']]},
- {k:'Layer 5',h:'Devices',p:'About 40 laptops, terminals and servers in my own MDM, patched every Wednesday and Friday.',spots:[[47,45,'laptops'],[127,45,'Android access terminals'],[240,195,'patched Wed + Fri']]},
- {k:'Layer 6',h:'Identity',p:'Okta for a team of about 15: single sign-on, MFA, SCIM provisioning and removal, tied into Active Directory with Group Policy.',spots:[[180,125,'Okta · SSO + MFA'],[50,44,'user · SCIM provisioned'],[320,194,'AD + Group Policy']]}];
-const layers=[];
-function svgTexture(fn){return new Promise(res=>{const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 250" width="1080" height="750">'+fn()+'</svg>';
-  const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=1080;c.height=750;c.getContext('2d').drawImage(img,0,0);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;res(t)};
-  img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)})}
-const slabGeo=new RoundedBoxGeometry(W,T,D,3,.06);
-const edgeGeo=new THREE.EdgesGeometry(new THREE.BoxGeometry(W,T,D));
-const pickables=[];
-for(let i=0;i<6;i++){
-  const g=new THREE.Group();const col=new THREE.Color(colors[i]);
-  const slab=new THREE.Mesh(slabGeo,new THREE.MeshStandardMaterial({color:0x1a1f27,metalness:.55,roughness:.45,transparent:true}));
-  const top=new THREE.Mesh(new THREE.PlaneGeometry(W*.985,D*.985),new THREE.MeshStandardMaterial({color:0xffffff,roughness:.55,metalness:.1,emissive:0xffffff,emissiveIntensity:.5,transparent:true}));
-  top.rotation.x=-Math.PI/2;top.position.y=T/2+.002;
-  const edgeMat=new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.9,toneMapped:false});
-  const edge=new THREE.LineSegments(edgeGeo,edgeMat);
-  g.add(slab,top,edge);device.add(g);slab.userData.i=i;top.userData.i=i;pickables.push(slab,top);
-  layers.push({g,top,slab,edge,edgeMat,col,glow:.35,vis:1,intro:reduce?1:0});
-  svgTexture(arts[i]).then(t=>{top.material.map=t;top.material.emissiveMap=t;top.material.needsUpdate=true});
-}
-const posts=[];const postMat=new THREE.MeshStandardMaterial({color:0xc9d2de,metalness:.9,roughness:.25,emissive:0x223344,emissiveIntensity:.4,transparent:true});
-[[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([sx,sz])=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,1,12),postMat);m.position.set(sx*(W/2-.18),0,sz*(D/2-.18));device.add(m);posts.push(m)});
-const fc=document.createElement('canvas');fc.width=fc.height=256;const fx=fc.getContext('2d');const gr=fx.createRadialGradient(128,128,0,128,128,128);gr.addColorStop(0,'rgba(79,180,255,.35)');gr.addColorStop(1,'rgba(79,180,255,0)');fx.fillStyle=gr;fx.fillRect(0,0,256,256);
-const floor=new THREE.Mesh(new THREE.PlaneGeometry(6.5,6.5),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(fc),transparent:true,depthWrite:false,opacity:.28}));floor.rotation.x=-Math.PI/2;floor.position.y=-.7;device.add(floor);
-const N=reduce?0:140,pPos=new Float32Array(N*3),pCol=new Float32Array(N*3),pSpd=new Float32Array(N);
-for(let k=0;k<N;k++){pPos[k*3]=(Math.random()-.5)*W*.85;pPos[k*3+1]=Math.random()*6;pPos[k*3+2]=(Math.random()-.5)*D*.85;pSpd[k]=.006+Math.random()*.012}
-const pGeo=new THREE.BufferGeometry();pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));pGeo.setAttribute('color',new THREE.BufferAttribute(pCol,3));
-const dot=document.createElement('canvas');dot.width=dot.height=64;const dx=dot.getContext('2d');const dg=dx.createRadialGradient(32,32,0,32,32,32);dg.addColorStop(0,'rgba(255,255,255,1)');dg.addColorStop(.3,'rgba(255,255,255,.6)');dg.addColorStop(1,'rgba(255,255,255,0)');dx.fillStyle=dg;dx.fillRect(0,0,64,64);
-const pMat=new THREE.PointsMaterial({size:.09,map:new THREE.CanvasTexture(dot),vertexColors:true,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,toneMapped:false});
-const pts=new THREE.Points(pGeo,pMat);device.add(pts);
-const beam=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,1,10),new THREE.MeshBasicMaterial({color:0xff3b2b,toneMapped:false,transparent:true,opacity:0}));device.add(beam);
-const ring=new THREE.Mesh(new THREE.RingGeometry(.9,1,64),new THREE.MeshBasicMaterial({color:0xff4d3d,toneMapped:false,transparent:true,opacity:0,side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;device.add(ring);
-const RED=new THREE.Color(0xff3b2b),AMBER=new THREE.Color(0xffb020);
-let hit=-1,hitKind='block',ringT=1,beamOn=0;
-
-const composer=new EffectComposer(renderer);composer.addPass(new RenderPass(scene,camera));
-const bloom=new UnrealBloomPass(new THREE.Vector2(512,512),.9,.55,.18);composer.addPass(bloom);composer.addPass(new OutputPass());
-
-let active=-1;
-addEventListener('kc-layer',e=>{active=e.detail});
-addEventListener('kc-hit',e=>{const d=e.detail;hit=d.i;hitKind=d.kind||'block';if(hit>=0){ringT=0;beamOn=1;ring.material.color.copy(hitKind==='pass'?AMBER:RED);beam.material.color.copy(hitKind==='pass'?AMBER:RED)}else beamOn=0});
-let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5},{passive:true});
-
-const steps=document.querySelector('.steps'),hero=document.querySelector('.hero');
-function size(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);composer.setSize(w,h);bloom.resolution.set(w/2,h/2);camera.aspect=w/h;camera.updateProjectionMatrix()}
+// ---- device group: built flat (board in XZ), then stood up on the wall facing +Z ----
+const dev=new THREE.Group();scene.add(dev);
+// THE PIN at the origin: a castellated pad of the module and the trace leaving it
+box(.9*mm,.04*mm,1.2*mm,M.gold,0,.02*mm,0,0,dev);
+const traceL=40*mm;
+const traces=[];
+for(let k=-3;k<=3;k++){const t=box(.25*mm,.035*mm,traceL,M.copper,k*1.27*mm,.018*mm,traceL/2+.6*mm,0,dev);traces.push(t);
+  if(k)box(.9*mm,.04*mm,1.2*mm,M.gold,k*1.27*mm,.02*mm,0,0,dev)}
+// signal pulses along the centre traces
+const pulses=[];for(let k=-3;k<=3;k++)for(let j=0;j<3;j++){const p=new THREE.Mesh(new THREE.SphereGeometry(.16*mm,16,10),M.glow);p.userData={k,o:j/3+Math.random()*.1,sp:.18+Math.random()*.08};dev.add(p);pulses.push(p)}
+// THE CHIP: ESP32-S3-style module, pads on its edge at z=0, body extends to -z
+box(18*mm,.8*mm,25.5*mm,M.mask,0,.4*mm,-12.4*mm,0,dev);
+box(15.8*mm,2.4*mm,17.6*mm,M.can,0,2.0*mm,-11.3*mm,.4*mm,dev);
+box(16*mm,.5*mm,6*mm,M.black,0,1.05*mm,-22*mm,0,dev); // antenna area
+for(let i=0;i<9;i++)box(.9*mm,.05*mm,1.2*mm,M.gold,(i-4)*1.27*mm*1.15+0*mm,.02*mm,0,0,dev);
+// THE BOARD: 110 x 70 mm, chip sits near its front edge; traces run forward onto it
+const bw=110*mm,bd=72*mm;
+function pcbTex(){const c=document.createElement('canvas');c.width=2048;c.height=1340;const x=c.getContext('2d');x.fillStyle='#1d5137';x.fillRect(0,0,2048,1340);
+  let s=7;const r=()=>(s=(s*9301+49297)%233280)/233280;x.strokeStyle='rgba(197,138,74,.75)';x.lineWidth=5;x.lineCap='round';
+  for(let i=0;i<90;i++){const a=[r()*2048,r()*1340],b=[r()*2048,r()*1340];x.beginPath();x.moveTo(a[0],a[1]);x.lineTo((a[0]+b[0])/2,a[1]);x.lineTo((a[0]+b[0])/2,b[1]);x.lineTo(b[0],b[1]);x.stroke()}
+  x.fillStyle='rgba(255,255,255,.8)';x.font='500 40px monospace';x.fillText('KC-01  REV B',60,1290);
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t}
+const board=box(bw,1.6*mm,bd,new THREE.MeshStandardMaterial({map:pcbTex(),roughness:.5}),10*mm,-.8*mm,8*mm,0,dev);
+// a few parts on the board
+for(let i=0;i<10;i++){const c=new THREE.Mesh(new THREE.CylinderGeometry(2.2*mm,2.2*mm,5*mm,24),M.black);c.position.set((22+i%5*6)*mm,2.5*mm,(20+Math.floor(i/5)*7)*mm);dev.add(c)}
+box(14*mm,2*mm,10*mm,M.black,38*mm,1*mm,-14*mm,.5*mm,dev);   // BMS
+box(9*mm,3.2*mm,7*mm,M.can,-38*mm,1.6*mm,34*mm,1*mm,dev);    // USB-C
+for(let i=0;i<2;i++){const c=new THREE.Mesh(new THREE.CylinderGeometry(9*mm,9*mm,65*mm,40),M.cell);c.rotation.z=Math.PI/2;c.position.set(18*mm,-12*mm,(-4+i*20)*mm);dev.add(c)}
+// THE ENCLOSURE: white shell around it (open front so the board shows, like a cutaway)
+const encl=new THREE.Group();dev.add(encl);
+const ew=150*mm,eh=46*mm,ed=110*mm,ey=-14*mm;
+box(ew,4*mm,ed,M.white,10*mm,ey-eh/2,8*mm,2*mm,encl);              // back plate (wall side)
+box(4*mm,eh,ed,M.white,10*mm-ew/2,ey,8*mm,1.5*mm,encl);box(4*mm,eh,ed,M.white,10*mm+ew/2,ey,8*mm,1.5*mm,encl);
+box(ew,eh,4*mm,M.white,10*mm,ey,8*mm-ed/2,1.5*mm,encl);box(ew,eh,4*mm,M.white,10*mm,ey,8*mm+ed/2,1.5*mm,encl);
+// stand the device up on the wall: board plane becomes vertical, front faces +Z
+dev.rotation.x=Math.PI/2;dev.rotation.z=0;
+// ---- THE DOOR: wall behind the device, door to the right, reader beside it ----
+const wallZ=-(eh/2-ey)-2*mm;  // just behind the back plate (after rotation, -y maps to -z)
+const site=new THREE.Group();scene.add(site);
+const floorY=-1.45;
+box(6,3.2,.12,M.wall,0,floorY+1.6,-.075+wallZ,0,site);
+box(1.0,2.15,.06,M.door,1.35,floorY+1.075,wallZ+.02,0,site);
+box(.04,2.2,.08,M.black,.83,floorY+1.1,wallZ+.02,0,site);box(.04,2.2,.08,M.black,1.87,floorY+1.1,wallZ+.02,0,site);
+box(.08,.13,.03,M.black,.62,floorY+1.2,wallZ+.03,.01,site);const rl=box(.02,.02,.01,M.glow,.62,floorY+1.25,wallZ+.05,0,site);
+box(.12,.02,.02,M.can,1.75,floorY+1.05,wallZ+.06,0,site);
+// ---- THE BUILDING: white massing with the door on its front face ----
+const bx=0,bz=wallZ-11;
+box(34,11,22,M.bldg,bx,floorY+5.5,bz-.1+0,0,site);
+for(let f=0;f<3;f++)for(let w=0;w<9;w++){if(f===0&&(w===4))continue;box(2.4,1.6,.05,M.glass,-14+w*3.5,floorY+2.4+f*3.2,wallZ+.02,0,site)}
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(40000,40000),M.ground);ground.rotation.x=-Math.PI/2;ground.position.y=floorY;scene.add(ground);
+// faint metric grid on the ground (reads at city scale)
+const grid=new THREE.GridHelper(8000,80,0x3a3d44,0x26282d);grid.position.y=floorY+.05;grid.material.transparent=true;grid.material.opacity=.5;scene.add(grid);
+// ---- INSIDE THE BUILDING: the security side (server room + admin desk) ----
+M.bldg.transparent=true;M.glass.transparent=true;
+const room=new THREE.Group();scene.add(room);
+const RX=-9,RZ=wallZ-7;
+box(9,.04,7,new THREE.MeshStandardMaterial({color:0x2a2c31,roughness:.9}),RX,floorY+.02,RZ,0,room);
+const inLight=new THREE.PointLight(0xfff1dc,6,14,1.6);inLight.position.set(RX+1,floorY+3.2,RZ+1.5);room.add(inLight);
+// two racks
+const rackMat=new THREE.MeshStandardMaterial({color:0x1b1c20,roughness:.5,metalness:.3});
+const unitMat=new THREE.MeshStandardMaterial({color:0x2c2f35,roughness:.45,metalness:.4});
+const ledG=new THREE.MeshBasicMaterial({color:0x5fe08a,toneMapped:false}),ledA=new THREE.MeshBasicMaterial({color:AMB,toneMapped:false});
+const leds=[];
+[-.45,.45].forEach((dx,ri)=>{const x=RX+dx-1.2;box(.62,2.0,.9,rackMat,x,floorY+1.0,RZ,0,room);
+  for(let u=0;u<12;u++){const y=floorY+.2+u*.145;if(u===6)continue;box(.54,.1,.04,unitMat,x,y,RZ+.45,.005,room);
+    const l=box(.018,.018,.01,(u%4===0)?ledA:ledG,x+.22,y,RZ+.475,0,room);leds.push(l)}});
+// patch panel + switch with VLAN-coloured patch cables (staff / guest / server / IoT)
+const sx=RX-1.2,sy=floorY+.2+6*.145,sz=RZ+.47;
+box(1.5,.1,.06,unitMat,sx,sy,sz-.02,.005,room);
+const VL=[0x5b8cff,AMB,0xb28cff,0x5fe08a];
+for(let k=0;k<16;k++){const col=VL[k%4];const x0=sx-.62+k*.083;
+  const c=new THREE.CatmullRomCurve3([new THREE.Vector3(x0,sy,sz+.02),new THREE.Vector3(x0+.02,sy-.12,sz+.1),new THREE.Vector3(x0+(k%2?.1:-.1),sy-.3,sz+.08),new THREE.Vector3(x0,sy-.42,sz+.02)]);
+  room.add(new THREE.Mesh(new THREE.TubeGeometry(c,16,.008,6),new THREE.MeshStandardMaterial({color:col,roughness:.6})))}
+// admin desk + laptop with an identity screen
+const DX=RX+2.4,DZ=RZ+1.6;
+box(1.6,.05,.8,new THREE.MeshStandardMaterial({color:0xcfcbc2,roughness:.7}),DX,floorY+.75,DZ,.01,room);
+[[-.7,-.32],[.7,-.32],[-.7,.32],[.7,.32]].forEach(([lx,lz])=>box(.04,.75,.04,M.black,DX+lx,floorY+.375,DZ+lz,0,room));
+box(.36,.012,.25,M.can,DX,floorY+.783,DZ+.05,.004,room);
+function scrTex(){const c=document.createElement('canvas');c.width=1440;c.height=900;const x=c.getContext('2d');
+  x.fillStyle='#101114';x.fillRect(0,0,1440,900);
+  x.fillStyle='#e9e7e2';x.font='500 44px sans-serif';x.fillText('Sign in',90,150);
+  x.fillStyle='#7d7c78';x.font='400 26px sans-serif';x.fillText('Single sign-on · one identity for every app',90,200);
+  x.strokeStyle='#34363d';x.lineWidth=2;[[90,250],[90,345]].forEach(([a,b])=>{x.strokeRect(a,b,560,68)});
+  x.fillStyle='#b4b2ad';x.font='400 26px sans-serif';x.fillText('karandev@company',112,293);x.fillText('••••••••••••',112,388);
+  x.fillStyle='#ffb547';x.fillRect(90,450,560,70);x.fillStyle='#101114';x.font='600 28px sans-serif';x.fillText('Verify with MFA',255,495);
+  x.fillStyle='#e9e7e2';x.font='500 30px sans-serif';x.fillText('Push sent to your phone',90,600);
+  x.fillStyle='#7d7c78';x.font='400 24px monospace';
+  ['policy  MFA required for all apps','scim    new hire provisioned','scim    leaver deprovisioned · access removed','ad      group policy applied'].forEach((l,i)=>x.fillText(l,780,170+i*52));
+  x.strokeStyle='#24262c';x.beginPath();x.moveTo(740,110);x.lineTo(740,800);x.stroke();
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t}
+const lapBase=box(.62,.025,.42,M.can,DX-.25,floorY+.79,DZ,.01,room);
+const lid=new THREE.Group();lid.position.set(DX-.25,floorY+.8,DZ-.21);lid.rotation.x=-.32;room.add(lid);
+box(.62,.4,.02,M.can,0,.2,0,.008,lid);
+const screen=new THREE.Mesh(new THREE.PlaneGeometry(.58,.36),new THREE.MeshBasicMaterial({map:scrTex(),toneMapped:false}));screen.position.set(0,.2,.011);lid.add(screen);
+const SCREEN=new THREE.Vector3();
+// keep the ground grid, drop the city
+// ---- camera: one continuous move out from the pin ----
+const target=new THREE.Vector3();
+function size(){R.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
 addEventListener('resize',size);size();
-document.body.classList.add('gl');
-
-// ---- intro: the device assembles itself once per visit ----
-let introOn=!reduce;try{if(sessionStorage.getItem('kc.intro'))introOn=false}catch(e){}
-let introStart=performance.now()+250;
-const skipBtn=document.getElementById('skip');
-function endIntro(){if(!introOn)return;introOn=false;document.body.classList.remove('intro');layers.forEach(L=>L.intro=1);try{sessionStorage.setItem('kc.intro','1')}catch(e){}}
-if(introOn){document.body.classList.add('intro');layers.forEach(L=>L.intro=0);skipBtn.addEventListener('click',endIntro);addEventListener('wheel',endIntro,{once:true,passive:true});addEventListener('keydown',endIntro,{once:true});addEventListener('touchstart',endIntro,{once:true,passive:true})}
-else layers.forEach(L=>L.intro=1);
-const ease=t=>1-Math.pow(1-t,4);
-
-// ---- inspect: click a layer, the camera flies to it ----
-const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
-let inspect=-1,insT=0;const hot=document.getElementById('hot');
-const insPanel=document.getElementById('inspect'),insK=document.getElementById('insK'),insH=document.getElementById('insH'),insP=document.getElementById('insP');
-function pick(ev){ndc.set(ev.clientX/innerWidth*2-1,-(ev.clientY/innerHeight)*2+1);ray.setFromCamera(ndc,camera);const h=ray.intersectObjects(pickables,false);return h.length?h[0].object.userData.i:-1}
-function openInspect(i){inspect=i;const I=INFO[i];insK.textContent=I.k;insK.style.setProperty('--ic',colors[i]);insPanel.style.setProperty('--ic',colors[i]);insH.textContent=I.h;insP.textContent=I.p;
-  hot.innerHTML='';I.spots.forEach(sp=>{const d=document.createElement('div');d.className='hs';d.style.setProperty('--hc',colors[i]);d.innerHTML='<i></i><span></span>';d.querySelector('span').textContent=sp[2];hot.appendChild(d)});
-  document.body.classList.add('inspecting');document.getElementById('insX').focus({preventScroll:true})}
-function closeInspect(){if(inspect<0)return;inspect=-1;document.body.classList.remove('inspecting')}
-document.getElementById('insX').addEventListener('click',closeInspect);
-addEventListener('keydown',e=>{if(e.key==='Escape')closeInspect()});
-addEventListener('wheel',()=>{if(inspect>=0&&insT>.9)closeInspect()},{passive:true});
-document.querySelectorAll('.stage').forEach(st=>{
-  st.addEventListener('click',e=>{if(introOn){endIntro();return}const i=pick(e);if(i>=0)openInspect(i)});
-  st.addEventListener('pointermove',e=>{st.classList.toggle('pick',pick(e)>=0)});
-});
-const vtmp=new THREE.Vector3(),camPos=new THREE.Vector3(),camLook=new THREE.Vector3(),wantPos=new THREE.Vector3(),wantLook=new THREE.Vector3();
-let first=true;
-
-const right=new THREE.Vector3();
-let offS=1,t0=performance.now(),explodeS=0;
-function lerp(a,b,t){return a+(b-a)*t}
+let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5},{passive:true});
+let pS=0,t0=performance.now();
+const tmp=new THREE.Vector3(),dir=new THREE.Vector3();
 function frame(now){
-  const t=(now-t0)/1000,vh=innerHeight,narrow=innerWidth<900;
-  const r=steps.getBoundingClientRect();
-  const p=Math.min(1,Math.max(0,(vh*.7-r.top)/(vh*.8)));
-  const out=Math.min(1,Math.max(0,(vh*.55-r.bottom)/(vh*.6)));
-  explodeS=lerp(explodeS,inspect>=0?Math.max(p,.75):p,.08);
-  const gap=lerp(.17,narrow?.7:.95,explodeS);
-  // intro progress
-  if(introOn){const it=(now-introStart)/2400;layers.forEach((L,i)=>{L.intro=Math.min(1,Math.max(0,(it*1.5-i*.1)))});if(it>1.25)endIntro()}
-  layers.forEach((L,i)=>{const e=ease(L.intro);
-    L.g.position.set((1-e)*(i%2?2.4:-2.4),i*gap+(1-e)*(6+i*1.2),(1-e)*(i%2?-1.5:1.5));
-    L.g.rotation.set((1-e)*.5,(1-e)*(i%2?.9:-.9),(1-e)*.3);
-    const isHit=hit===i,on=active===i,ins=inspect===i;
-    const target=e<1?e*.6:(isHit?3.2:(inspect>=0?(ins?1.6:.05):(active<0?.55:(on?2.4:.18))));
-    L.glow=lerp(L.glow,target,.12);
-    L.edgeMat.color.copy(isHit?(hitKind==='pass'?AMBER:RED):L.col).multiplyScalar(L.glow);
-    const vis=inspect>=0?(ins?1:.07):((active<0||on||isHit)?1:.35);L.vis=lerp(L.vis,vis,.1);
-    L.top.material.opacity=L.vis*e;L.slab.material.opacity=Math.min(1,L.vis*1.4)*e;L.edgeMat.opacity=.9*Math.max(.15,L.vis)*e;
-    L.top.material.emissiveIntensity=lerp(L.top.material.emissiveIntensity,(inspect>=0?(ins?.75:.05):((active<0||on||isHit)?.55:.12)),.1)});
-  const minIntro=Math.min(...layers.map(L=>L.intro));
-  const H=5*gap;posts.forEach(m=>{m.scale.y=Math.max(.01,(H+.1)*ease(minIntro));m.position.y=m.scale.y/2;m.material.opacity=inspect>=0?.15:1});
-  pMat.opacity=inspect>=0?.15:ease(minIntro);
-  const pos=pGeo.attributes.position.array,colA=pGeo.attributes.color.array;
-  for(let k=0;k<N;k++){pos[k*3+1]+=pSpd[k]*(.6+explodeS*1.4);if(pos[k*3+1]>H+.6)pos[k*3+1]=-.3;
-    const li=Math.max(0,Math.min(5,Math.round(pos[k*3+1]/Math.max(gap,.01))));const c=hit>=0?(hitKind==='pass'?AMBER:RED):layers[li].col;colA[k*3]=c.r;colA[k*3+1]=c.g;colA[k*3+2]=c.b}
-  pGeo.attributes.position.needsUpdate=true;pGeo.attributes.color.needsUpdate=true;
-  const topY=H+1.6;beam.material.opacity=lerp(beam.material.opacity,beamOn?.95:0,.2);
-  if(hit>=0){const y=hit*gap;beam.scale.y=topY-y;beam.position.y=(topY+y)/2;ring.position.y=y+.08}
-  ringT=Math.min(1,ringT+.022);ring.scale.setScalar(.4+ringT*2.4);ring.material.opacity=hit>=0?(1-ringT)*.9:0;
-  // camera: page framing, or fly-in when inspecting
-  const heroP=Math.min(1,Math.max(0,-hero.getBoundingClientRect().top/(vh*.8)));
-  const off=narrow?0:lerp(1.55,-1.25,Math.min(1,heroP*1.1));offS=lerp(offS,off,.08);
-  const dist=(narrow?17:14.5)+explodeS*4.4;
-  wantPos.set(dist*.55,dist*.48+explodeS*1.2,dist*.68);wantLook.set(0,H*.5-(narrow?0:explodeS*1.1),0);
-  const spin=(reduce||inspect>=0)?0:Math.sin(t*.25)*.22;
-  device.rotation.y=lerp(device.rotation.y,inspect>=0?0:spin+mx*.5,.06);
-  device.rotation.x=lerp(device.rotation.x,inspect>=0?0:my*.12,.06);
-  insT=lerp(insT,inspect>=0?1:0,.07);
-  if(inspect>=0){const L=layers[inspect];L.g.getWorldPosition(vtmp);
-    wantLook.copy(vtmp);wantPos.set(vtmp.x+(narrow?2.2:3.3),vtmp.y+(narrow?7.4:6.2),vtmp.z+(narrow?5.6:5.4));
-    if(!narrow){camera.setViewOffset(innerWidth,innerHeight,-innerWidth*.12,0,innerWidth,innerHeight)}}
-  if(first){camPos.copy(wantPos);camLook.copy(wantLook);first=false}
-  camPos.lerp(wantPos,inspect>=0?.06:.12);camLook.lerp(wantLook,inspect>=0?.06:.12);
-  // page offset only applies outside inspect
-  right.set(1,0,0).applyQuaternion(camera.quaternion);
-  const devOff=right.clone().multiplyScalar(offS*(dist/6)*(1-insT));
-  device.position.copy(devOff);
-  camera.position.copy(camPos);camera.lookAt(camLook);
-  if(inspect<0){if(narrow)camera.setViewOffset(innerWidth,innerHeight,0,innerHeight*(.2-.2*explodeS),innerWidth,innerHeight);else camera.clearViewOffset()}
-  // hotspots
-  if(inspect>=0){const L=layers[inspect],I=INFO[inspect],kids=hot.children;
-    I.spots.forEach((sp,j)=>{vtmp.set((sp[0]/360-.5)*W,T/2+.01,(sp[1]/250-.5)*D);L.g.localToWorld(vtmp);vtmp.project(camera);
-      const el=kids[j];if(el){el.style.left=((vtmp.x+1)/2*innerWidth)+'px';el.style.top=((1-vtmp.y)/2*innerHeight)+'px'}})}
-  canvas.style.opacity=String(inspect>=0?1:(1-out*.9-(narrow&&p>.2&&out<1?.45:0)));
-  composer.render();
-  requestAnimationFrame(frame);
-}
+  const t=Math.max(0,(now-t0)/1000);const p=prog();pS+=(p-pS)*.12;ui(pS);
+  const narrow=innerWidth<900,ts=reduce?0:t;
+  screen.getWorldPosition(SCREEN);
+  // keyframes: [target, azimuth, elevation]
+  const K=[
+    [[0,0,0],.55,.42],
+    [[0,0,0],.6,.5],
+    [[0,0,0],.62,.55],
+    [[.55,floorY+1.15,wallZ],.5,.28],
+    [[0,floorY+5,bz],.6,.55],
+    [[RX-1.2,floorY+1.1,RZ+.4],.35,.18],
+    [[SCREEN.x,SCREEN.y,SCREEN.z],.02,.12]
+  ];
+  const sI=stopAt(pS),i=Math.min(K.length-2,Math.floor(sI)),f=sI-i,g=f<.28?0:f>.72?1:smooth((f-.28)/.44);
+  const lg=STOPS[i]+(STOPS[i+1]-STOPS[i])*g,d=Math.pow(10,lg);
+  const A=K[i],B=K[i+1];
+  target.set(A[0][0]+(B[0][0]-A[0][0])*g,A[0][1]+(B[0][1]-A[0][1])*g,A[0][2]+(B[0][2]-A[0][2])*g);
+  const az=A[1]+(B[1]-A[1])*g+(reduce?0:Math.sin(t*.12)*.02)+mx*.05,el=A[2]+(B[2]-A[2])*g+my*.02;
+  dir.set(Math.sin(az)*Math.cos(el),Math.sin(el),Math.cos(az)*Math.cos(el));
+  cam.position.copy(target).addScaledVector(dir,d);cam.lookAt(target);
+  cam.near=Math.max(1e-6,d*.002);cam.far=d*400+5000;cam.updateProjectionMatrix();
+  if(narrow)cam.setViewOffset(innerWidth,innerHeight,0,innerHeight*.16,innerWidth,innerHeight);else cam.setViewOffset(innerWidth,innerHeight,-innerWidth*.18,0,innerWidth,innerHeight);
+  // the building turns to a ghost as the camera goes back inside
+  const inside=Math.min(1,Math.max(0,(sI-4.25)/.45));
+  M.bldg.opacity=1-inside*.94;M.glass.opacity=1-inside*.9;M.bldg.depthWrite=inside<.5;M.glass.depthWrite=inside<.5;
+  room.visible=sI>3.6;
+  pulses.forEach(q=>{const u=(q.userData.o+ts*q.userData.sp)%1;q.position.set(q.userData.k*1.27*mm,.06*mm,.6*mm+u*traceL);q.visible=lg<-.2&&sI<3});
+  leds.forEach((l,k)=>{l.visible=Math.sin(ts*(2+k%5)+k)>-.6});
+  rl.material=(Math.sin(ts*3)>0)?M.glow:M.black;
+  R.render(scene,cam);requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
-}catch(err){console.warn('WebGL scene off:',err);document.body.classList.remove('gl','intro')}
+}catch(e){console.warn('3D off',e);addEventListener('scroll',()=>ui(prog()),{passive:true})}
 </script>
 </body>
 </html>
