@@ -6,6 +6,9 @@
 <title>Karandev Chauhan</title>
 <meta name="description" content="From the pin to the policy: Karandev Chauhan builds field hardware and secures the identity, devices and network around it. Security, IAM and embedded hardware in the Greater Toronto Area.">
 <meta name="theme-color" content="#0b0c0e">
+<link rel="preload" as="image" href="seq/stop0.webp" media="(orientation: landscape)" fetchpriority="high">
+<link rel="preload" as="image" href="seq/m/stop0.webp" media="(orientation: portrait)" fetchpriority="high">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -27,7 +30,7 @@ a:hover{text-decoration-color:var(--acc)}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:4px}
 .wrap{max-width:1360px;margin:0 auto;padding:0 var(--gut)}
 
-#seq{position:fixed;inset:0;z-index:0;pointer-events:none;display:none;background:#0b0c0e}#seq>*{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}#seq>.show{opacity:1}#seq img{transition:opacity .35s}html.vid #seq{display:block}html.vid #gl{display:none}
+#seq{position:fixed;inset:0;z-index:0;pointer-events:none;background:#0b0c0e}#seq video,#seq img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}#seq .show{opacity:1}html.live #seq,html.rm #seq{display:none}html:not(.live):not(.rm) #gl{opacity:0}html.vid #gl{z-index:1;object-fit:cover;transition:opacity .25s}
 html.rm body>*:not(#gl){visibility:hidden!important}html.rm{overflow:hidden}
 #gl{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block;pointer-events:none;transition:opacity .5s}
 .top{position:fixed;inset:0 0 auto 0;z-index:6;display:flex;align-items:center;gap:20px;padding:18px var(--gut);background:linear-gradient(rgba(11,12,14,.85),rgba(11,12,14,0))}
@@ -119,7 +122,7 @@ html{scrollbar-width:none}html::-webkit-scrollbar,body::-webkit-scrollbar{displa
 </head>
 <body>
 <canvas id="gl" aria-hidden="true"></canvas>
-<div id="seq" aria-hidden="true"><img alt=""><video muted playsinline preload="auto"></video><video muted playsinline preload="auto"></video><video muted playsinline preload="auto"></video></div>
+<div id="seq" aria-hidden="true"><picture><source media="(orientation: portrait)" srcset="seq/m/stop0.webp"><img alt="" src="seq/stop0.webp" class="show" fetchpriority="high" decoding="async"></picture><video muted playsinline preload="auto"></video><video muted playsinline preload="auto"></video><video muted playsinline preload="auto"></video></div>
 
 <header class="top">
   <a class="me" href="#top">Karandev Chauhan</a>
@@ -245,19 +248,15 @@ html{scrollbar-width:none}html::-webkit-scrollbar,body::-webkit-scrollbar{displa
 
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module">
-import * as THREE from 'three';
-import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
-import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
-import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
-import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
-import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
-import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
-import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 // ?render: offline frame renderer for the pre-rendered zoom (no UI, fixed time, max quality)
 const RM=new URLSearchParams(location.search).has('render');let fixP=0,fixT=0;if(RM)document.documentElement.classList.add('rm');
 // pre-rendered zoom (desktop): every move is a rendered clip; the live 3D engine is not started at all
-const VID=!RM&&innerWidth>=900&&!new URLSearchParams(location.search).has('live');if(VID)document.documentElement.classList.add('vid');
+function SEQPIC(){const pic=document.querySelector('#seq picture');if(!pic)return;const img=pic.querySelector('img');img.src=img.currentSrc||img.src;pic.querySelector('source')?.remove()}
+const VID=!RM&&!new URLSearchParams(location.search).has('live'),SEQB=innerWidth<innerHeight?'seq/m/':'seq/',PLAIN=RM&&new URLSearchParams(location.search).has('plain');
+// in clip mode the live canvas is a transparent overlay at the plate's own size, cropped with object-fit like the video
+const PW=SEQB==='seq/m/'?828:1600,PH=SEQB==='seq/m/'?1472:1000,VW=()=>VID?PW:innerWidth,VH=()=>VID?PH:innerHeight;let seqIdle=true;document.documentElement.classList.add(VID?'vid':'live');
+if(VID)SEQPIC();
 const caps=[...document.querySelectorAll('.cp')],sn=document.getElementById('sn'),su=document.getElementById('su'),hud=document.getElementById('hud');
 const rail=document.getElementById('rail'),rb=[...rail.querySelectorAll('button')],rfill=rail.querySelector('.fill');
 // log10 of camera distance (metres) at each stop: pin, chip, board, door, building, network, policy
@@ -295,22 +294,23 @@ function go(k,ms){k=Math.max(0,Math.min(NS,k));const y0=scrollY,y1=yAt(k);if(Mat
 const SQ=document.getElementById('seq'),SQI=SQ.querySelector('img'),SQV=[...SQ.querySelectorAll('video')],CL={},CLIP_S=1.25;let seqAt=0,seqShown=null;
 function clipUrl(k,d){return CL['s'+k+d]}
 function show(el){[SQI,...SQV].forEach(e=>e.classList.toggle('show',e===el));seqShown=el}
-function poster(k){SQI.src='seq/stop'+k+'.jpg';show(SQI)}
+function poster(k){SQI.src=SEQB+'stop'+k+'.webp';show(SQI)}
 function arm(v,url){if(!url){v.removeAttribute('src');v.dataset.u='';return}if(v.dataset.u!==url){v.dataset.u=url;v.src=url}try{v.pause();v.currentTime=0}catch(e){}}
 function armAround(k){const free=SQV.filter(v=>v!==seqShown);arm(free[0],k<NS?clipUrl(k,'f'):null);arm(free[1],k>0?clipUrl(k-1,'b'):null)}
 function playClip(url,rate){return new Promise(res=>{let v=SQV.find(v=>v!==seqShown&&v.dataset.u===url);if(!v){v=SQV.find(v=>v!==seqShown);arm(v,url)}
-  v.playbackRate=rate;v.onended=()=>res(v);const go=()=>{const p=v.play();(p&&p.then?p:Promise.resolve()).then(()=>{requestAnimationFrame(()=>show(v))}).catch(()=>res(v))};
+  v.playbackRate=rate;v.onended=()=>res(v);const go=()=>{const p=v.play();(p&&p.then?p:Promise.resolve()).then(()=>{requestAnimationFrame(()=>show(v))}).catch(()=>res(null))};
   if(v.readyState>=2)go();else v.addEventListener('loadeddata',go,{once:true})})}
 // returns the scroll tween duration to match what the clips will take
-function seqGo(k,ms){const from=Math.round(seqAt);seqAt=k;if(reduce){poster(k);return 0}
+function seqGo(k,ms){const from=Math.round(seqAt);seqAt=k;seqIdle=false;if(reduce){poster(k);seqIdle=true;return 0}
   const steps=[];for(let i=from;i!==k;i+=Math.sign(k-from))steps.push(k>from?['f',i]:['b',i-1]);
-  if(!steps.length||steps.some(([d,i])=>!clipUrl(i,d))){poster(k);return ms}
+  if(!steps.length||steps.some(([d,i])=>!clipUrl(i,d))){poster(k);setTimeout(()=>{if(seqAt===k)seqIdle=true},ms);return ms}
   const rate=steps.length>1?Math.min(3,steps.length*CLIP_S/(ms/1000)):1;
-  (async()=>{for(const [d,i] of steps){if(seqAt!==k)return;await playClip(clipUrl(i,d),rate)}if(seqAt===k)armAround(k)})();
+  (async()=>{for(const [d,i] of steps){if(seqAt!==k)return;const ok=await playClip(clipUrl(i,d),rate);if(!ok){poster(k);seqIdle=true;return}}if(seqAt===k){poster(k);armAround(k);seqIdle=true}})();
   return steps.length*CLIP_S*1000/rate}
+let firstClips;const firstClipsP=new Promise(r=>firstClips=r);setTimeout(()=>firstClips(),8000);
 if(VID){const order=[];for(let r=0;r<NS;r++){order.push(['f',r]);order.push(['b',r])}
-  seqAt=Math.round(Math.max(0,Math.min(NS,(scrollY-(zoomEl.getBoundingClientRect().top+scrollY))/Math.max(1,zoomEl.offsetHeight-innerHeight)*NS)));poster(seqAt);
-  (async()=>{for(const [d,i] of order){try{const b=await (await fetch('seq/s'+i+d+'.mp4')).blob();CL['s'+i+d]=URL.createObjectURL(b);if(Math.abs(i-seqAt)<=1)armAround(seqAt)}catch(e){}}})()}
+  seqAt=Math.round(Math.max(0,Math.min(NS,(scrollY-(zoomEl.getBoundingClientRect().top+scrollY))/Math.max(1,zoomEl.offsetHeight-innerHeight)*NS)));poster(seqAt);for(let k=0;k<=NS;k++)new Image().src=SEQB+'stop'+k+'.webp';
+  (async()=>{for(const [d,i] of order){try{const b=await (await fetch(SEQB+'s'+i+d+'.mp4',{priority:i===0?'auto':'low'})).blob();CL['s'+i+d]=URL.createObjectURL(b);if(CL.s0f&&CL.s0b)firstClips();if(Math.abs(i-seqAt)<=1)armAround(seqAt)}catch(e){}}})()}
 function inZoom(){const z=zr();return scrollY>=z.top-2&&scrollY<=z.top+z.total+2}
 function curK(){const z=zr();return (scrollY-z.top)/z.total*NS}
 function step(dir){const k=curK();
@@ -334,11 +334,15 @@ function logDist(p){const s=stopAt(p),i=Math.min(STOPS.length-2,Math.floor(s)),f
   // hold near each stop, travel between stops
   const g=f<.28?0:f>.72?1:smooth((f-.28)/.44);return STOPS[i]+(STOPS[i+1]-STOPS[i])*g}
 
+if(VID)await firstClipsP;
+if(VID)await new Promise(r=>{const go=()=>(window.requestIdleCallback||((f)=>setTimeout(f,300)))(r,{timeout:2000});document.readyState==='complete'?go():addEventListener('load',go,{once:true})});
+const [THREE,{RoundedBoxGeometry},{RoomEnvironment},{EffectComposer},{RenderPass},{UnrealBloomPass},{OutputPass},{mergeGeometries}]=await Promise.all([
+  import('three'),import('three/addons/geometries/RoundedBoxGeometry.js'),import('three/addons/environments/RoomEnvironment.js'),import('three/addons/postprocessing/EffectComposer.js'),
+  import('three/addons/postprocessing/RenderPass.js'),import('three/addons/postprocessing/UnrealBloomPass.js'),import('three/addons/postprocessing/OutputPass.js'),import('three/addons/utils/BufferGeometryUtils.js')]);
 try{
-if(VID)throw 'video';
 const canvas=document.getElementById('gl');
-const R=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'high-performance'});R.localClippingEnabled=true;
-let qLevel=0;const PXB=()=>RM?1:Math.min(devicePixelRatio,innerWidth<900?1.5:1.75,Math.sqrt(2.3e6/(innerWidth*innerHeight)));R.setPixelRatio(PXB());R.shadowMap.enabled=true;R.shadowMap.type=RM?THREE.PCFSoftShadowMap:THREE.PCFShadowMap;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;R.setClearColor(0x0b0c0e,1);
+const R=new THREE.WebGLRenderer({canvas,antialias:VID,alpha:VID,powerPreference:'high-performance'});R.localClippingEnabled=true;
+let qLevel=0;const PXB=()=>(RM||VID)?1:Math.min(devicePixelRatio,innerWidth<900?1.5:1.75,Math.sqrt(2.3e6/(innerWidth*innerHeight)));R.setPixelRatio(PXB());R.shadowMap.enabled=!VID;R.shadowMap.type=RM?THREE.PCFSoftShadowMap:THREE.PCFShadowMap;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;R.setClearColor(0x0b0c0e,1);if(VID){R.setClearColor(0,0);R.autoClear=false}
 const scene=new THREE.Scene();
 const pm=new THREE.PMREMGenerator(R);scene.environment=pm.fromScene(new RoomEnvironment(),.04).texture;
 const cam=new THREE.PerspectiveCamera(34,1,1e-5,1e6);
@@ -406,7 +410,7 @@ function decal(t,w,d,x,y,z,parent,o={}){const m=new THREE.Mesh(new THREE.PlaneGe
 
 // ================= THE BOARD (built flat in mm, board top at y=0) =================
 const dev=new THREE.Group();scene.add(dev);
-const BX0=-45,BZ0=-28,BW=110,BD=72,TW=innerWidth<900?2048:4096,PS=TW/BW;
+const BX0=-45,BZ0=-28,BW=110,BD=72,TW=VID?256:(innerWidth<900?2048:4096),PS=TW/BW;
 const big=[
  {ref:'U2',x:36,z:-14,w:6.4,d:6},{ref:'U3',x:-26,z:8,w:6.4,d:6.4},{ref:'L1',x:28,z:-1,w:7,d:7},
  {ref:'C1',x:50,z:10,w:7.4,d:7.4},{ref:'C2',x:50,z:20,w:7.4,d:7.4},{ref:'Y1',x:14,z:-8,w:4,d:3.4},
@@ -553,7 +557,7 @@ for(let i=0;i<9;i++){const x=(i-4)*1.27;const h=new THREE.Mesh(halfHole,hhM);h.p
 // THE PIN: traces leaving the castellations, with signal pulses
 const traceL=40*mm;
 for(let k=-3;k<=3;k++)box(.25*mm,.035*mm,traceL,M.copper,k*1.27*mm,.018*mm,traceL/2+.9*mm,0,dev);
-const pulses=[];for(let k=-3;k<=3;k++)for(let j=0;j<3;j++){const p=new THREE.Mesh(new THREE.SphereGeometry(.12*mm,16,10),M.glow);p.userData={k,o:j/3+rnd()*.1,sp:.18+rnd()*.08};dev.add(p);pulses.push(p)}
+const pulses=[];for(let k=-3;k<=3;k++)for(let j=0;j<(VID?9:3);j++){const p=new THREE.Mesh(new THREE.SphereGeometry(.12*mm,16,10),M.glow);p.userData={k,o:j/(VID?9:3)+Math.random()*.05,sp:(.08+Math.random()*.05)*(VID?1:2.2)};dev.add(p);pulses.push(p)}
 // close-up silkscreen decal around the pin (sharper than the board texture at 7 mm)
 decal(tx((()=>{const W=2048,H=2048,[c,x]=cv(W,H),k=W/16,X=v=>(v+8)*k,Z=v=>(v+1)*k;
   const g=x.createRadialGradient(W/2,H*.45,W*.25,W/2,H*.45,W*.5);
@@ -703,7 +707,11 @@ cyl(.075,.46,phys({color:0xb3201a,roughness:.3,clearcoat:1}),RX-4.33,floorY+.55,
 const ledG=new THREE.InstancedMesh(new THREE.BoxGeometry(.005,.004,.002),M.glowG,ledList.filter(l=>!l.a).length),ledA=new THREE.InstancedMesh(new THREE.BoxGeometry(.005,.004,.002),M.glow,ledList.filter(l=>l.a).length);
 room.add(ledG,ledA);
 const ledO=new THREE.Object3D();
-function blinkLeds(ts){let gi=0,ai=0;ledList.forEach((l,k)=>{ledO.position.copy(l.p);const on=Math.sin(ts*(2+k%5)+k*1.7)>-.5||!(k%4);ledO.scale.setScalar(on?1:0);ledO.updateMatrix();if(l.a)ledA.setMatrixAt(ai++,ledO.matrix);else ledG.setMatrixAt(gi++,ledO.matrix)});ledG.instanceMatrix.needsUpdate=ledA.instanceMatrix.needsUpdate=true}
+const glowTex=tx((()=>{const [c,x]=cv(64,64),g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.2,'rgba(255,255,255,.5)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return c})());
+const glowMat=c=>new THREE.MeshBasicMaterial({map:glowTex,color:c,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false});
+const gG=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1),glowMat(0x5fe08a),ledG.count),gA=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1),glowMat(AMB),ledA.count);room.add(gG,gA);
+function blinkLeds(ts){let gi=0,ai=0;ledList.forEach((l,k)=>{ledO.position.copy(l.p);const on=Math.sin(ts*(2+k%5)+k*1.7)>-.5||!(k%4);ledO.scale.setScalar(on?1:0);ledO.updateMatrix();const m=ledO.matrix.clone();ledO.position.z+=.001;ledO.scale.setScalar(on?.028:0);ledO.updateMatrix();
+  if(l.a){ledA.setMatrixAt(ai,m);gA.setMatrixAt(ai++,ledO.matrix)}else{ledG.setMatrixAt(gi,m);gG.setMatrixAt(gi++,ledO.matrix)}});ledG.instanceMatrix.needsUpdate=ledA.instanceMatrix.needsUpdate=gG.instanceMatrix.needsUpdate=gA.instanceMatrix.needsUpdate=true}
 blinkLeds(0);
 // ---- admin desk: monitor with the identity console, keyboard, phone with the MFA push ----
 const DX=RX+2.4,DZ=RZ+1.6,DT=floorY+.765;
@@ -744,25 +752,30 @@ function bake(root,skip){root.updateMatrixWorld(true);const inv=root.matrixWorld
     const g=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();Object.keys(g.attributes).forEach(k=>{if(!['position','normal','uv'].includes(k))g.deleteAttribute(k)});g.clearGroups();
     g.applyMatrix4(mt.multiplyMatrices(inv,o.matrixWorld));if(!buckets.has(o.material))buckets.set(o.material,[]);buckets.get(o.material).push(g);kill.push(o)});
   kill.forEach(o=>o.parent.remove(o));buckets.forEach((gs,m)=>{const mesh=new THREE.Mesh(mergeGeometries(gs,false),m);root.add(mesh)})}
+{const sm=new THREE.SpriteMaterial({map:glowTex,color:AMB,blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false,toneMapped:false});pulses.forEach(q=>{const sp=new THREE.Sprite(sm);sp.scale.setScalar(1.3*mm);q.add(sp)});
+  const rs=new THREE.Sprite(sm);rs.scale.setScalar(.06);rl.add(rs);[...pulses,ledG,ledA,gG,gA,rl].forEach(o=>o.traverse(c=>c.layers.set(1)));cam.layers.enable(1)}
+const depthOnly=new THREE.MeshBasicMaterial({colorWrite:false,clippingPlanes:[cut]});
 bake(dev,new Set(pulses));bake(bG,new Set());bake(site,new Set([bG,rl]));bake(room,new Set([screen]));
 scene.traverse(o=>{if(!o.isMesh)return;const basic=[].concat(o.material).some(m=>m.isMeshBasicMaterial);o.castShadow=!basic&&!o.userData.decal&&o!==ground;o.receiveShadow=!basic})
-{const seen=new Set();scene.traverse(o=>{if(!o.material)return;[].concat(o.material).forEach(m=>{for(const k in m){const v=m[k];if(v&&v.isTexture&&!seen.has(v)){seen.add(v);R.initTexture(v)}}})});R.compile(scene,cam)}
+{const seen=new Set();scene.traverse(o=>{if(!o.material)return;[].concat(o.material).forEach(m=>{for(const k in m){const v=m[k];if(v&&v.isTexture&&!seen.has(v)){seen.add(v);if(!VID)R.initTexture(v)}}})});R.compile(scene,cam)}
 const composer=new EffectComposer(R,new THREE.WebGLRenderTarget(1,1,{type:THREE.HalfFloatType,samples:4}));
 composer.addPass(new RenderPass(scene,cam));const bloom=new UnrealBloomPass(new THREE.Vector2(256,256),.55,.35,1.6);composer.addPass(bloom);composer.addPass(new OutputPass());
 // ---- camera: one continuous move out from the pin ----
 const target=new THREE.Vector3();
-function size(){if(!qLevel)R.setPixelRatio(PXB());R.setSize(innerWidth,innerHeight,false);composer.setPixelRatio(R.getPixelRatio());composer.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+function size(){if(!qLevel)R.setPixelRatio(PXB());R.setSize(VW(),VH(),false);if(VID){canvas.style.width='100vw';canvas.style.height='100vh'}composer.setPixelRatio(R.getPixelRatio());composer.setSize(VW(),VH());cam.aspect=VW()/VH();cam.updateProjectionMatrix()}
 addEventListener('resize',size);size();
-let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5},{passive:true});
+let mx=0,my=0;addEventListener('pointermove',e=>{if(VID)return;mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5},{passive:true});
+let lastOv=0;const OVMS=innerWidth<900?32:15;
 let pS=0,t0=performance.now(),lastNow=performance.now(),ftAvg=16,ftN=0;
 const QL=[()=>R.setPixelRatio(Math.min(devicePixelRatio,1.4)),()=>{bloom.enabled=false},()=>R.setPixelRatio(Math.min(devicePixelRatio,1.1)),()=>R.setPixelRatio(.9)];
 const tmp=new THREE.Vector3(),dir=new THREE.Vector3();
 function frame(now){
+  if(VID){requestAnimationFrame(frame);ui(prog());const idle=seqIdle&&!anim;canvas.style.opacity=idle?'1':'0';if(!idle||now-lastOv<OVMS)return;lastOv=now}
   const t=RM?fixT:Math.max(0,(now-t0)/1000),dt=Math.min(.1,(now-lastNow)/1000);lastNow=now;
   // quality steps down (never up) if frames run long, so scrolling stays smooth
-  if(!RM)ftAvg+=((dt*1000)-ftAvg)*.05;if(++ftN>90&&ftAvg>21&&qLevel<QL.length&&!document.hidden){QL[qLevel++]();size();ftN=0;ftAvg=16}
-  if(RM)pS=fixP;else{const p=prog();pS+=(p-pS)*(1-Math.exp(-dt*18));if(Math.abs(p-pS)<1e-5)pS=p;ui(pS)}
-  const narrow=innerWidth<900,ts=reduce?0:t;
+  if(!RM&&!VID)ftAvg+=((dt*1000)-ftAvg)*.05;if(++ftN>90&&ftAvg>21&&qLevel<QL.length&&!document.hidden){QL[qLevel++]();size();ftN=0;ftAvg=16}
+  if(RM)pS=fixP;else if(VID)pS=seqAt/NS;else{const p=prog();pS+=(p-pS)*(1-Math.exp(-dt*18));if(Math.abs(p-pS)<1e-5)pS=p;ui(pS)}
+  const narrow=VW()<900,ts=reduce?0:t;
   screen.getWorldPosition(SCREEN);
   // keyframes: [target, azimuth, elevation]
   const K=[
@@ -776,14 +789,14 @@ function frame(now){
     [[SCREEN.x,SCREEN.y,SCREEN.z],.02,.12]
   ];
   const sI=stopAt(pS),i=Math.min(K.length-2,Math.floor(sI)),f=sI-i,g=f;
-  const lg=STOPS[i]+(STOPS[i+1]-STOPS[i])*g,d=Math.pow(10,lg);
+  const lg=STOPS[i]+(STOPS[i+1]-STOPS[i])*g,asp=VW()/VH(),d=Math.pow(10,lg)*(asp<1?Math.min(2.2,Math.max(1,1.15/asp)):1);
   const A=K[i],B=K[i+1];
   target.set(A[0][0]+(B[0][0]-A[0][0])*g,A[0][1]+(B[0][1]-A[0][1])*g,A[0][2]+(B[0][2]-A[0][2])*g);
-  const az=A[1]+(B[1]-A[1])*g+(reduce?0:Math.sin(t*.12)*.02)+mx*.05,el=A[2]+(B[2]-A[2])*g+my*.02;
+  const az=A[1]+(B[1]-A[1])*g+(reduce?0:Math.sin((VID?10:t)*.12)*.02)+mx*.05,el=A[2]+(B[2]-A[2])*g+my*.02;
   dir.set(Math.sin(az)*Math.cos(el),Math.sin(el),Math.cos(az)*Math.cos(el));
   cam.position.copy(target).addScaledVector(dir,d);cam.lookAt(target);
   cam.near=d*.002;cam.far=d*600;cam.updateProjectionMatrix();
-  if(narrow)cam.setViewOffset(innerWidth,innerHeight,0,innerHeight*.16,innerWidth,innerHeight);else cam.setViewOffset(innerWidth,innerHeight,-innerWidth*.18,0,innerWidth,innerHeight);
+  {const W=VW(),H=VH();if(narrow)cam.setViewOffset(W,H,0,H*.16,W,H);else cam.setViewOffset(W,H,-W*.18,0,W,H)}
   // the building turns to a ghost as the camera goes back inside
   const inside=smooth(Math.min(1,Math.max(0,(sI-5.1)/.3)));
   const ch=floorY+15+(2.7-15)*inside;cut.constant=ch;cutLine.position.y=ch+.01;
@@ -791,14 +804,16 @@ function frame(now){
   room.visible=sI>4.6;dev.visible=sI<5.6;bG.visible=sI>3.4;
   pulses.forEach(q=>{const u=(q.userData.o+ts*q.userData.sp)%1;q.position.set(q.userData.k*1.27*mm,.06*mm,.6*mm+u*traceL);q.visible=lg<-.2&&sI<4});
   if(room.visible)blinkLeds(ts);
-  rl.material=(Math.sin(ts*3)>0)?M.glow:M.black;
+  rl.material=(Math.sin(ts*3)>0)?M.glow:M.black;rl.children[0].visible=rl.material===M.glow;
   // shadows and fog follow the scale of the shot
   sun.position.copy(target).addScaledVector(SUNDIR,d*6);sun.target.position.copy(target);sun.target.updateMatrixWorld();
   {const sc=sun.shadow.camera,e=d*1.15;sc.left=-e;sc.right=e;sc.top=e;sc.bottom=-e;sc.near=d*.5;sc.far=d*14;sc.updateProjectionMatrix();sun.shadow.normalBias=d*.0025;sun.shadow.bias=-.0003}
   scene.fog.near=d*2.6;scene.fog.far=d*16;
+  if(PLAIN){pulses.forEach(q=>q.visible=false);ledG.visible=ledA.visible=gG.visible=gA.visible=false;rl.material=M.black;rl.children[0].visible=false}
+  if(VID){R.clear();cam.layers.set(0);scene.overrideMaterial=depthOnly;R.render(scene,cam);scene.overrideMaterial=null;cam.layers.set(1);R.render(scene,cam);return}
   composer.render();if(!RM)requestAnimationFrame(frame)}
 // warm-up: draw the whole scene once (shadows included) so nothing compiles mid-scroll
-{size();cam.position.set(20,15,30);cam.lookAt(0,floorY+3,bz);cam.near=.01;cam.far=2000;cam.updateProjectionMatrix();sun.position.set(30,60,50);composer.render()}
+{size();if(!VID){cam.position.set(20,15,30);cam.lookAt(0,floorY+3,bz);cam.near=.01;cam.far=2000;cam.updateProjectionMatrix();sun.position.set(30,60,50);composer.render()}}
 if(RM){window.__renderAt=(p,tt)=>{fixP=p;fixT=tt;frame(performance.now());return 1};window.__ready=1}else requestAnimationFrame(frame);
 }catch(e){if(e!=='video')console.warn('3D off',e);addEventListener('scroll',()=>ui(prog()),{passive:true})}
 </script>
