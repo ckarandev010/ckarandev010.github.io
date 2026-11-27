@@ -255,7 +255,9 @@ const RM=new URLSearchParams(location.search).has('render');let fixP=0,fixT=0;if
 function SEQPIC(){const pic=document.querySelector('#seq picture');if(!pic)return;const img=pic.querySelector('img');img.src=img.currentSrc||img.src;pic.querySelector('source')?.remove()}
 const VID=!RM&&!new URLSearchParams(location.search).has('live'),SEQB=innerWidth<innerHeight?'seq/m/':'seq/',PLAIN=RM&&new URLSearchParams(location.search).has('plain');
 // in clip mode the live canvas is a transparent overlay at the plate's own size, cropped with object-fit like the video
-const PW=SEQB==='seq/m/'?828:1600,PH=SEQB==='seq/m/'?1472:1000,VW=()=>VID?PW:innerWidth,VH=()=>VID?PH:innerHeight;let seqIdle=true;document.documentElement.classList.add(VID?'vid':'live');
+const PW=SEQB==='seq/m/'?828:1600,PH=SEQB==='seq/m/'?1472:1000,VW=()=>VID?PW:innerWidth,VH=()=>VID?PH:innerHeight;let seqIdle=true,VP={p:0,sw:10},seqCur=null,ovRender=null,vfc=0,ovMs=4,slowOv=false;
+// pose of the frame on screen: clip frame fi of move i in direction d (75 frames, ease-out baked in at render time)
+function vPose(i,d,mt){const fi=Math.max(0,Math.min(74,Math.round(mt*60))),e=1-Math.pow(1-fi/74,3);VP={p:(d==='f'?i+e:i+1-e)/NS,sw:10+fi/60}}document.documentElement.classList.add(VID?'vid':'live');
 if(VID)SEQPIC();
 const caps=[...document.querySelectorAll('.cp')],sn=document.getElementById('sn'),su=document.getElementById('su'),hud=document.getElementById('hud');
 const rail=document.getElementById('rail'),rb=[...rail.querySelectorAll('button')],rfill=rail.querySelector('.fill');
@@ -297,15 +299,18 @@ function show(el){[SQI,...SQV].forEach(e=>e.classList.toggle('show',e===el));seq
 function poster(k){SQI.src=SEQB+'stop'+k+'.webp';show(SQI)}
 function arm(v,url){if(!url){v.removeAttribute('src');v.dataset.u='';return}if(v.dataset.u!==url){v.dataset.u=url;v.src=url}try{v.pause();v.currentTime=0}catch(e){}}
 function armAround(k){const free=SQV.filter(v=>v!==seqShown);arm(free[0],k<NS?clipUrl(k,'f'):null);arm(free[1],k>0?clipUrl(k-1,'b'):null)}
-function playClip(url,rate){return new Promise(res=>{let v=SQV.find(v=>v!==seqShown&&v.dataset.u===url);if(!v){v=SQV.find(v=>v!==seqShown);arm(v,url)}
-  v.playbackRate=rate;v.onended=()=>res(v);const go=()=>{const p=v.play();(p&&p.then?p:Promise.resolve()).then(()=>{requestAnimationFrame(()=>show(v))}).catch(()=>res(null))};
+function playClip(url,rate,ci,cd){return new Promise(res=>{let v=SQV.find(v=>v!==seqShown&&v.dataset.u===url);if(!v){v=SQV.find(v=>v!==seqShown);arm(v,url)}
+  v.playbackRate=rate;v.onended=()=>{vPose(ci,cd,99);res(v)};seqCur={v,i:ci,d:cd};
+  // the live layer follows the exact video frame on screen; the clip is revealed on its first presented frame
+  const tick=(n,meta)=>{if(!seqCur||seqCur.v!==v)return;vPose(ci,cd,meta.mediaTime);if(seqShown!==v)show(v);if(ovRender&&!slowOv&&!(innerWidth<900&&(vfc++&1))){const a=performance.now();ovRender();ovMs+=(performance.now()-a-ovMs)*.2;if(ovMs>10)slowOv=true}if(!v.ended)v.requestVideoFrameCallback(tick)};
+  const go=()=>{if(v.requestVideoFrameCallback)v.requestVideoFrameCallback(tick);const p=v.play();(p&&p.then?p:Promise.resolve()).then(()=>{if(!v.requestVideoFrameCallback)requestAnimationFrame(()=>show(v))}).catch(()=>res(null))};
   if(v.readyState>=2)go();else v.addEventListener('loadeddata',go,{once:true})})}
 // returns the scroll tween duration to match what the clips will take
-function seqGo(k,ms){const from=Math.round(seqAt);seqAt=k;seqIdle=false;if(reduce){poster(k);seqIdle=true;return 0}
+function seqGo(k,ms){const from=Math.round(seqAt);seqAt=k;seqIdle=false;if(reduce){poster(k);VP={p:k/NS,sw:10};seqIdle=true;return 0}
   const steps=[];for(let i=from;i!==k;i+=Math.sign(k-from))steps.push(k>from?['f',i]:['b',i-1]);
-  if(!steps.length||steps.some(([d,i])=>!clipUrl(i,d))){poster(k);setTimeout(()=>{if(seqAt===k)seqIdle=true},ms);return ms}
+  if(!steps.length||steps.some(([d,i])=>!clipUrl(i,d))){poster(k);seqCur=null;VP={p:k/NS,sw:10};seqIdle=true;return ms}
   const rate=steps.length>1?Math.min(3,steps.length*CLIP_S/(ms/1000)):1;
-  (async()=>{for(const [d,i] of steps){if(seqAt!==k)return;const ok=await playClip(clipUrl(i,d),rate);if(!ok){poster(k);seqIdle=true;return}}if(seqAt===k){poster(k);armAround(k);seqIdle=true}})();
+  (async()=>{for(const [d,i] of steps){if(seqAt!==k)return;const ok=await playClip(clipUrl(i,d),rate,i,d);if(!ok){poster(k);seqCur=null;VP={p:k/NS,sw:10};seqIdle=true;return}}if(seqAt===k){seqCur=null;armAround(k);seqIdle=true}})();
   return steps.length*CLIP_S*1000/rate}
 let firstClips;const firstClipsP=new Promise(r=>firstClips=r);setTimeout(()=>firstClips(),8000);
 if(VID){const order=[];for(let r=0;r<NS;r++){order.push(['f',r]);order.push(['b',r])}
@@ -769,12 +774,13 @@ let lastOv=0;const OVMS=innerWidth<900?32:15;
 let pS=0,t0=performance.now(),lastNow=performance.now(),ftAvg=16,ftN=0;
 const QL=[()=>R.setPixelRatio(Math.min(devicePixelRatio,1.4)),()=>{bloom.enabled=false},()=>R.setPixelRatio(Math.min(devicePixelRatio,1.1)),()=>R.setPixelRatio(.9)];
 const tmp=new THREE.Vector3(),dir=new THREE.Vector3();
-function frame(now){
-  if(VID){requestAnimationFrame(frame);ui(prog());const idle=seqIdle&&!anim;canvas.style.opacity=idle?'1':'0';if(!idle||now-lastOv<OVMS)return;lastOv=now}
+function frame(now,fromVF){
+  if(VID&&!fromVF){requestAnimationFrame(frame);ui(prog());const playing=seqCur&&!seqCur.v.paused&&!seqCur.v.ended;if(playing&&(slowOv||!seqCur.v.requestVideoFrameCallback)&&slowOv){canvas.style.opacity='0';return}if(playing&&seqCur.v.requestVideoFrameCallback)return;if(playing)vPose(seqCur.i,seqCur.d,seqCur.v.currentTime);if(now-lastOv<OVMS)return;lastOv=now}
+  if(VID&&canvas.style.opacity!=='1')canvas.style.opacity='1';
   const t=RM?fixT:Math.max(0,(now-t0)/1000),dt=Math.min(.1,(now-lastNow)/1000);lastNow=now;
   // quality steps down (never up) if frames run long, so scrolling stays smooth
   if(!RM&&!VID)ftAvg+=((dt*1000)-ftAvg)*.05;if(++ftN>90&&ftAvg>21&&qLevel<QL.length&&!document.hidden){QL[qLevel++]();size();ftN=0;ftAvg=16}
-  if(RM)pS=fixP;else if(VID)pS=seqAt/NS;else{const p=prog();pS+=(p-pS)*(1-Math.exp(-dt*18));if(Math.abs(p-pS)<1e-5)pS=p;ui(pS)}
+  if(RM)pS=fixP;else if(VID)pS=VP.p;else{const p=prog();pS+=(p-pS)*(1-Math.exp(-dt*18));if(Math.abs(p-pS)<1e-5)pS=p;ui(pS)}
   const narrow=VW()<900,ts=reduce?0:t;
   screen.getWorldPosition(SCREEN);
   // keyframes: [target, azimuth, elevation]
@@ -792,7 +798,7 @@ function frame(now){
   const lg=STOPS[i]+(STOPS[i+1]-STOPS[i])*g,asp=VW()/VH(),d=Math.pow(10,lg)*(asp<1?Math.min(2.2,Math.max(1,1.15/asp)):1);
   const A=K[i],B=K[i+1];
   target.set(A[0][0]+(B[0][0]-A[0][0])*g,A[0][1]+(B[0][1]-A[0][1])*g,A[0][2]+(B[0][2]-A[0][2])*g);
-  const az=A[1]+(B[1]-A[1])*g+(reduce?0:Math.sin((VID?10:t)*.12)*.02)+mx*.05,el=A[2]+(B[2]-A[2])*g+my*.02;
+  const az=A[1]+(B[1]-A[1])*g+(reduce?0:Math.sin((VID?VP.sw:t)*.12)*.02)+mx*.05,el=A[2]+(B[2]-A[2])*g+my*.02;
   dir.set(Math.sin(az)*Math.cos(el),Math.sin(el),Math.cos(az)*Math.cos(el));
   cam.position.copy(target).addScaledVector(dir,d);cam.lookAt(target);
   cam.near=d*.002;cam.far=d*600;cam.updateProjectionMatrix();
@@ -814,6 +820,7 @@ function frame(now){
   composer.render();if(!RM)requestAnimationFrame(frame)}
 // warm-up: draw the whole scene once (shadows included) so nothing compiles mid-scroll
 {size();if(!VID){cam.position.set(20,15,30);cam.lookAt(0,floorY+3,bz);cam.near=.01;cam.far=2000;cam.updateProjectionMatrix();sun.position.set(30,60,50);composer.render()}}
+if(VID)ovRender=()=>frame(performance.now(),1);
 if(RM){window.__renderAt=(p,tt)=>{fixP=p;fixT=tt;frame(performance.now());return 1};window.__ready=1}else requestAnimationFrame(frame);
 }catch(e){if(e!=='video')console.warn('3D off',e);addEventListener('scroll',()=>ui(prog()),{passive:true})}
 </script>
